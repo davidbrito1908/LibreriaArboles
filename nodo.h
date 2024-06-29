@@ -4,22 +4,22 @@
 
 template <typename Tipo>
 
-class NodoBin{
+class Nodo{
     protected:
         Tipo info;
-        NodoBin<Tipo> *hijoIzq, *herDer;
+        Nodo<Tipo> *hijoIzq, *herDer;
     public:
-        void crear(Tipo elemento, NodoBin<Tipo> * hijoIzq, NodoBin<Tipo>*HerDer);
+        void crear(Tipo elemento, Nodo<Tipo> * hijoIzq, Nodo<Tipo>*HerDer);
         Tipo getInfo();
-        NodoBin<Tipo> * getHijoIzq();
-        NodoBin<Tipo> * getHerDer();
+        Nodo<Tipo> * getHijoIzq();
+        Nodo<Tipo> * getHerDer();
         void setInfo(Tipo elemento);
-        void setHijoIzq(NodoBin<Tipo> * apuntador);
-        void setHerDer(NodoBin<Tipo> * apuntador);
+        void setHijoIzq(Nodo<Tipo> * apuntador);
+        void setHerDer(Nodo<Tipo> * apuntador);
 
 };
 template <typename Tipo>
-void NodoBin<Tipo>::crear(Tipo elemento, NodoBin<Tipo> * hijoIzq, NodoBin<Tipo>*HerDer){
+void Nodo<Tipo>::crear(Tipo elemento, Nodo<Tipo> * hijoIzq, Nodo<Tipo>*HerDer){
     this->setInfo(elemento);
     this->setHijoIzq(hijoIzq);
     this->setHerDer(HerDer);
@@ -27,30 +27,30 @@ void NodoBin<Tipo>::crear(Tipo elemento, NodoBin<Tipo> * hijoIzq, NodoBin<Tipo>*
 
 
 template <typename Tipo>
-Tipo NodoBin<Tipo>::getInfo(){
+Tipo Nodo<Tipo>::getInfo(){
     return this->info; 
 }
 
 template <typename Tipo>
-NodoBin<Tipo> * NodoBin<Tipo>::getHijoIzq(){
+Nodo<Tipo> * Nodo<Tipo>::getHijoIzq(){
     return this->hijoIzq;
 }
 template <typename Tipo>
-NodoBin<Tipo> * NodoBin<Tipo>::getHerDer(){
+Nodo<Tipo> * Nodo<Tipo>::getHerDer(){
     return this->HerDer;
 }
 
 template <typename Tipo>
-void NodoBin<Tipo>::setInfo(Tipo elemento){
+void Nodo<Tipo>::setInfo(Tipo elemento){
     this->info = elemento;
 }
 
 template <typename Tipo>
-void NodoBin<Tipo>::setHijoIzq(NodoBin<Tipo> * apuntador){
+void Nodo<Tipo>::setHijoIzq(Nodo<Tipo> * apuntador){
     this->hijoIzq = apuntador;
 }
 template <typename Tipo>
-void NodoBin<Tipo>::setHerDer(NodoBin<Tipo> * apuntador){
+void Nodo<Tipo>::setHerDer(Nodo<Tipo> * apuntador){
     this->HerDer = apuntador;
 }
 
