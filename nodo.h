@@ -37,7 +37,7 @@ Nodo<Tipo> * Nodo<Tipo>::getHijoIzq(){
 }
 template <typename Tipo>
 Nodo<Tipo> * Nodo<Tipo>::getHerDer(){
-    return this->HerDer;
+    return this->herDer;
 }
 
 template <typename Tipo>
@@ -51,7 +51,7 @@ void Nodo<Tipo>::setHijoIzq(Nodo<Tipo> * apuntador){
 }
 template <typename Tipo>
 void Nodo<Tipo>::setHerDer(Nodo<Tipo> * apuntador){
-    this->HerDer = apuntador;
+    this->herDer = apuntador;
 }
 
 #endif

@@ -3,6 +3,7 @@
 #include "nodo.h"
 #include <list>
 #include <stack>
+#include <queue>
 using namespace std;
 
 template <typename Tipo>
@@ -12,39 +13,52 @@ class ArbolN{
         int peso;
         Nodo<Tipo> *raiz;
     private:
-        static Nodo<Tipo>* copiarNodos(Nodo<Tipo>* ptrNodo);
-        static void destruirNodos(Nodo<Tipo>* p);
+        Nodo<Tipo>* copiarNodos(Nodo<Tipo>* p);
+        void destruirNodos(Nodo<Tipo>* p);
 
     public:
         void construir();
         void construir(Tipo raiz, list<ArbolN> L);
-        void construir(Arbol *a);
-        void copiar(ArbolN *A);
+        void construir(ArbolN<Tipo> *a);
+        void copiar(ArbolN<Tipo> *A);
         bool esNulo();
 
-        Tipo raiz();
-        void insertarNodo(Tipo padre, Tipo hijo);
-
+        Tipo infoRaiz();
+        void insertarNodo(Tipo padre, Tipo hijo, Nodo<Tipo> *raiz);
         void crear(int peso, Nodo<Tipo> * raiz);
         int getPeso();
         Nodo<Tipo> * getRaiz();
         void setPeso(int peso);
-        void setRaiz(Nodo<Tipo> * apuntador);
+        void setRaiz(Nodo<Tipo> * r);
         list<ArbolN> hijos();
         void insertarSubarbol(ArbolN<Tipo> arbol);
         void eliminarSubarbol (int pos);
         void destruir();
 
-};
-#endif
 
+        void imprimirPreOrden(Nodo<Tipo> *raiz);
+        void imprimirPostOrden(Nodo<Tipo> *raiz);
+        void imprimirInOrden(Nodo<Tipo> *raiz);
+        void imprimirPorNiveles(queue<Nodo<Tipo>*> actual);
+
+
+};
+
+template <typename Tipo>
+Nodo<Tipo>* ArbolN<Tipo>::getRaiz(){
+    return this->raiz;
+}
+template <typename Tipo>
+void ArbolN<Tipo>::setRaiz(Nodo<Tipo> *r){
+    this->raiz = r;
+}
 template <typename Tipo>
 void ArbolN<Tipo>::construir(){
     this->raiz =nullptr;
     this->peso = 0;
 }
 template <typename Tipo>
-static Nodo<Tipo>* copiarNodos(Nodo<Tipo>* p){
+Nodo<Tipo>* ArbolN<Tipo>::copiarNodos(Nodo<Tipo>* p){
     Nodo<Tipo> *nuevo;
 
     if (p ==nullptr){
@@ -52,7 +66,7 @@ static Nodo<Tipo>* copiarNodos(Nodo<Tipo>* p){
     }
     else{
         nuevo = new(Nodo<Tipo>);
-        nuevo->construir(p->getInfo(), copiarNodos(p->getHijoIzq()), copiarNodos(p->getHerDer()));
+        nuevo->crear(p->getInfo(), copiarNodos(p->getHijoIzq()), copiarNodos(p->getHerDer()));
         return (nuevo);
     }
 }
@@ -76,17 +90,23 @@ void ArbolN<Tipo>::construir(Tipo raiz, list<ArbolN<Tipo>> L){
 }
 
 template <typename Tipo>
-void ArbolN<Tipo>::copiar(ArbolN *a){
+void ArbolN<Tipo>::copiar(ArbolN<Tipo> *a){
     this->setRaiz(copiarNodos(a->getRaiz()));
 }
+
+
 template <typename Tipo>
 bool ArbolN<Tipo>::esNulo(){
     return (this->getRaiz() == nullptr);
 }
+
+
 template <typename Tipo>
-Tipo ArbolN<Tipo>::raiz(){
+Tipo ArbolN<Tipo>::infoRaiz(){
     return this->getRaiz()->getInfo();
 }
+
+
 template <typename Tipo>
 list<ArbolN<Tipo>> ArbolN<Tipo>::hijos(){
     Nodo<Tipo> *aux;
@@ -95,7 +115,7 @@ list<ArbolN<Tipo>> ArbolN<Tipo>::hijos(){
 
     aux=this->getRaiz()->getHijoIzq();
     while (aux != nullptr){
-        arbolAux->setRaiz(aux);
+        arbolAux.setRaiz(aux);
         L.push_back(arbolAux);
         aux=aux->getHerDer();
     }
@@ -106,17 +126,16 @@ template <typename Tipo>
 void ArbolN<Tipo>::insertarSubarbol(ArbolN<Tipo> subarbol){
     Nodo<Tipo> *aux;
 
-    if (this->getRaiz()->getHijoIzq() != nullptr){
-        this->getRaiz()->setHijoIzq(copiarNodos(subarbol->getRaiz()));
+    if (this->getRaiz()->getHijoIzq() == nullptr){
+        this->getRaiz()->setHijoIzq(copiarNodos(subarbol.getRaiz()));
     }else{
         aux = this->getRaiz()->getHijoIzq();
         while(aux->getHerDer() != nullptr){
             aux= aux->getHerDer();
         }
-        aux->setHerDer(copiarNodos(subarbol->getRaiz()));
+        aux->setHerDer(copiarNodos(subarbol.getRaiz()));
     }
 }
-
 
 template <typename Tipo>
 void ArbolN<Tipo>::destruirNodos(Nodo<Tipo> *p) {
@@ -133,7 +152,7 @@ void ArbolN<Tipo>::destruirNodos(Nodo<Tipo> *p) {
 }
 template <typename Tipo>
 void ArbolN<Tipo>::eliminarSubarbol(int pos) {
-    Nodo<Tipo> *aux, elim;
+    Nodo<Tipo> *aux, *elim;
     int i;
 
     if (pos==1){
@@ -148,14 +167,15 @@ void ArbolN<Tipo>::eliminarSubarbol(int pos) {
         elim = aux->getHerDer();
         aux->setHerDer(aux->getHerDer()->getHerDer());
     }
+
 }
 
 
-template <typename Tipo>
+/*template <typename Tipo>
 // Versión RECURSIVA
 void ArbolN<Tipo>::destruir(){
     destruirNodos(this->getRaiz());
-}
+}*/
 
 
 template <typename Tipo>
@@ -165,18 +185,124 @@ void ArbolN<Tipo>::destruir(){
     Nodo<Tipo> *aux;
 
     if(this->raiz != nullptr) {
-        p.apilar(this->raiz);
-        while(!p.esVacia()){
-            aux = p.tope();
-            p.desapilar();
-            if(*aux.getHijoIzquierdo() != nullptr) {
-                p.apilar(*aux.getHijoIzquierdo());
+        p.push(this->raiz);
+        while(!p.empty()){
+            aux = p.top();
+            p.pop();
+            if(aux->getHijoIzq() != nullptr) {
+                p.push(aux->getHijoIzq());
             }
-            if(*aux.getHermanoDerecho() != nullptr) {
-                p.apilar(*aux.getHermanoDerecho());
+            if(aux->getHerDer() != nullptr) {
+                p.push(aux->getHerDer());
             }
-                aux.destruir();
+                //aux->destruir();
         }
         this->raiz = nullptr;
     }
 }
+
+
+
+template <typename Tipo>
+void ArbolN<Tipo>::insertarNodo(Tipo padre, Tipo hijo, Nodo<Tipo> *raiz){
+    Nodo<Tipo> *nuevo, *aux;
+
+    if(raiz != nullptr){
+        nuevo = new(Nodo<Tipo>);
+        nuevo->setInfo(hijo);
+        nuevo->setHijoIzq(nullptr);
+        nuevo->setHerDer(nullptr);
+
+        if(raiz->getInfo() == padre){
+            if (raiz->getHijoIzq() == nullptr){
+                raiz->setHijoIzq(nuevo);
+                return;
+            }
+            else{
+                aux = raiz->getHijoIzq();
+                while(aux->getHerDer() != nullptr){
+                    aux = aux->getHerDer();
+                }
+                aux->setHerDer(nuevo);
+                return;
+            }
+        }
+        else{
+            insertarNodo(padre,hijo,raiz->getHijoIzq());
+            insertarNodo(padre,hijo,raiz->getHerDer());
+        }
+    }
+    
+}
+
+
+
+template <typename Tipo>
+void ArbolN<Tipo>::imprimirPreOrden(Nodo<Tipo> *raiz){
+    if (raiz==nullptr){
+        return;
+    }else{
+        cout << raiz->getInfo() << " ";
+        imprimirPreOrden(raiz->getHijoIzq());
+        imprimirPreOrden(raiz->getHerDer());
+    }
+}
+template <typename Tipo>
+void ArbolN<Tipo>::imprimirPostOrden(Nodo<Tipo> *raiz){
+    if (raiz==nullptr){
+        return;
+    }else{
+        imprimirPostOrden(raiz->getHijoIzq());
+        imprimirPostOrden(raiz->getHerDer());
+        cout << raiz->getInfo() << " ";
+    }
+}
+template <typename Tipo>
+void ArbolN<Tipo>::imprimirInOrden(Nodo<Tipo> *raiz){
+    Nodo<Tipo> *aux;
+
+    if (raiz==nullptr){
+        return;
+    }else{
+        imprimirInOrden(raiz->getHijoIzq());
+        cout << raiz->getInfo() << " ";
+        if(raiz->getHijoIzq() != nullptr){
+            aux = raiz->getHijoIzq()->getHerDer();
+            while(aux != nullptr){
+                imprimirInOrden(aux);
+                aux = aux->getHerDer();
+            }
+        }
+    }
+}
+template <typename Tipo>
+void ArbolN<Tipo>::imprimirPorNiveles(queue<Nodo<Tipo>*> actual){
+    queue<Nodo<Tipo>*> sigNivel;
+    Nodo<Tipo> *aux; 
+    int hijos = 0;
+
+    cout<<endl;
+    while (!actual.empty()) {
+        hijos=0;
+        if (actual.front()->getHijoIzq() != nullptr){
+            sigNivel.push(actual.front()->getHijoIzq());
+            hijos++;
+            
+            aux = actual.front()->getHijoIzq()->getHerDer();
+            while( aux != nullptr){
+                sigNivel.push(aux);
+                hijos++;
+                aux = aux->getHerDer();
+            }
+            
+        }
+        cout << actual.front()->getInfo() << " (" << hijos << ") "<< "  ";
+        actual.pop();
+    }
+    if(!sigNivel.empty()){
+        imprimirPorNiveles(sigNivel);
+    }
+}
+
+
+#endif
