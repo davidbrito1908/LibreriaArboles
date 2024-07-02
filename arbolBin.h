@@ -34,6 +34,9 @@ class ArbolBin{
         void copiar(ArbolBin<Tipo> *a);
         void destruir();
         void insertarNodo(Tipo padre, Tipo hijo, NodoBin<Tipo> *raiz);
+        void insertarSubarbol(ArbolBin<Tipo> subarbol);
+        void eliminarSubarbol(int pos); //NO LOS ELIMINA COMO TAL
+        //void destruirNodos(NodoBin<Tipo> *p); //HACER
 
         void imprimirPreOrden(NodoBin<Tipo> *raiz);
         void imprimirPostOrden(NodoBin<Tipo> *raiz);
@@ -87,7 +90,10 @@ void ArbolBin<Tipo>::construir(Tipo e, ArbolBin<Tipo> a1, ArbolBin<Tipo> a2){
     this->getRaiz()->setHijoIzq(copiarNodos(a1.getRaiz()));
     this->getRaiz()->setHijoDer(copiarNodos(a2.getRaiz()));
 }
-
+template <typename Tipo>
+void ArbolBin<Tipo>::construir(ArbolBin<Tipo> *a){
+    this->raiz = copiarNodos(a->getRaiz());
+}
 
 template <typename Tipo>
 void ArbolBin<Tipo>::copiar(ArbolBin<Tipo> *a){
@@ -264,10 +270,34 @@ void ArbolBin<Tipo>::insertarNodo(Tipo padre, Tipo hijo, NodoBin<Tipo> *raiz){
     }
 }
 
+template <typename Tipo>
+void ArbolBin<Tipo>::insertarSubarbol(ArbolBin<Tipo> subarbol){
+    if (this->getRaiz()->getHijoIzq() == nullptr){
+        this->getRaiz()->setHijoIzq(copiarNodos(subarbol.getRaiz()));
+    }else{
+        if (this->getRaiz()->getHijoDer() == nullptr){
+            this->getRaiz()->setHijoDer(copiarNodos(subarbol.getRaiz()));
+        }
+    }
+}
 
-/*list<Tipo> getPrimos(Tipo elemento){
-    list<Tipo> result;
-}*/
+template <typename Tipo>
+void ArbolBin<Tipo>::eliminarSubarbol(int pos) {
+    NodoBin<Tipo> *aux;
+    int i;
+
+    if (pos==1){
+        aux = this->getRaiz()->getHijoIzq();
+        this->getRaiz()->setHijoIzq(this->getRaiz()->getHijoDer());
+        this->getRaiz()->setHijoDer(nullptr);
+    }
+    else{
+        aux = this->getRaiz()->getHijoDer();
+        this->getRaiz()->setHijoDer(nullptr);
+    }
+
+}
+
 template <typename Tipo>
 void ArbolBin<Tipo>::LCA(NodoBin<Tipo> *r, Tipo e1, Tipo e2, bool *encontrado1, bool *encontrado2, bool *LCAEncontrado, Tipo *ancestro){
     bool encontradoe1hi, encontradoe2hi, encontradoe1hd, encontradoe2hd;

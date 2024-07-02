@@ -34,17 +34,32 @@ int main(){
     //int ancestro = A.LCA(3,4);
     queue<NodoBin<int>*> c;
     c.push(A.getRaiz());
-    A.imprimirPorNiveles(c);
+    //A.imprimirPorNiveles(c);
     /*list<int> primos = A.getPrimos(8, c);
     while (!primos.empty()){
         cout << primos.front()<<endl;
         primos.pop_front();
     }*/
 
-    int a = A.LCA(6,7);
-    cout << endl << a;
+    //int a = A.LCA(6,7);
+    //cout << endl << a;
     //cout<<endl<<ancestro;
-    B.copiar(&A);
+    B=A.hijoDer();
+    c.pop();
+    c.push(B.getRaiz());
+    //B.imprimirPorNiveles(c);
+
+
+    C.construir();
+    NodoBin<int> r3, r4;
+    r3.crear(9, nullptr, nullptr);
+    r4.crear(2, nullptr, nullptr);
+    C.setRaiz(&r3);
+    C.getRaiz()->setHijoIzq(&r4);
+    C.insertarSubarbol(B);
+    C.eliminarSubarbol(1);
+    C.insertarSubarbol(A);
+    C.imprimirPreOrden(C.getRaiz());
     //B = A.hijoIzq();
     //B.imprimirPreOrden(B.getRaiz());
     //C= A.hijoDer();
