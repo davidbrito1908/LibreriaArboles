@@ -54,6 +54,13 @@ class ArbolBin{
         void imprimirInOrden(NodoBin<Tipo> *raiz); //
         void imprimirPorNiveles(queue<NodoBin<Tipo>*> actual); //
 
+        void preOrden(NodoBin<Tipo> *raiz, list<Tipo> *L);
+        list<Tipo> preOrden();
+        void postOrden(NodoBin<Tipo> *raiz, list<Tipo> *L);
+        list<Tipo> postOrden();
+        void inOrden(NodoBin<Tipo> *raiz, list<Tipo> *L);
+        list<Tipo> inOrden();
+
         //LECTURAS ==============================================
         NodoBin<Tipo> *  leerArbol(list<Tipo> preorden, list<Tipo> inorden); //
         NodoBin<Tipo> *  leerArbolPostOrden(list<Tipo> postorden, list<Tipo> inorden); //
@@ -313,8 +320,49 @@ void ArbolBin<Tipo>::imprimirPorNiveles(queue<NodoBin<Tipo>*> actual){
 }
 
 
+template <typename Tipo>
+void ArbolBin<Tipo>::preOrden(NodoBin<Tipo> *raiz, list<Tipo> *L){
+    if (raiz!=nullptr){
+        L->push_back(raiz->getInfo());
+        preOrden(raiz->getHijoIzq(), L);
+        preOrden(raiz->getHijoDer(), L);
+    }
+}
+template <typename Tipo>
+list<Tipo> ArbolBin<Tipo>::preOrden(){
+    list<Tipo> L;
+    preOrden(this->raiz, &L);
+    return L;
+}
 
-
+template <typename Tipo>
+void ArbolBin<Tipo>::postOrden(NodoBin<Tipo> *raiz, list<Tipo> *L){
+    if (raiz!=nullptr){
+        postOrden(raiz->getHijoIzq(), L);
+        postOrden(raiz->getHijoDer(), L);
+        L->push_back(raiz->getInfo());
+    }
+}
+template <typename Tipo>
+list<Tipo> ArbolBin<Tipo>::postOrden(){
+    list<Tipo> L;
+    postOrden(this->raiz, &L);
+    return L;
+}
+template <typename Tipo>
+void ArbolBin<Tipo>::inOrden(NodoBin<Tipo> *raiz, list<Tipo> *L){
+    if (raiz!=nullptr){
+        inOrden(raiz->getHijoIzq(), L);
+        L->push_back(raiz->getInfo());
+        inOrden(raiz->getHijoDer(), L);
+    }
+}
+template <typename Tipo>
+list<Tipo> ArbolBin<Tipo>::inOrden(){
+    list<Tipo> L;
+    inOrden(this->raiz, &L);
+    return L;
+}
 
 //LECTURAS =============================================================================
 

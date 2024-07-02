@@ -91,6 +91,12 @@ int main(){
 
     //queue<NodoBin<int>*> c;
     c.push(A.getRaiz());
-    A.imprimirPreOrden();
+    //A.imprimirPreOrden();
+
+    list<int> L = A.inOrden();
+    while(!L.empty()){
+        cout<<L.front()<<" ";
+        L.pop_front();
+    }
     return 0;
 }
