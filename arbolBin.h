@@ -367,33 +367,33 @@ NodoBin<Tipo> * ArbolBin<Tipo>::leerArbolPostOrden(list<Tipo> postorden, list<Ti
     NodoBin<Tipo> *r;
     list<Tipo> postIzq, postDer, inIzq, inDer;
 
-    if(!postorden.empty()){
+    if(!inorden.empty()){
         r = new (NodoBin<Tipo>);
         r->setInfo(postorden.back());
         postorden.pop_back();
 
 
         //LLENAR LISTAS DE LA PARTE DERECHA DEL ARBOL (MIENTRAS NO SE ENCUENTRE LA RAIZ EN EL INORDEN)
-        while(inorden.back() != r->getInfo()){
-            inDer.push_front(inorden.back());
-            postDer.push_front(postorden.back());
+        while(inorden.front() != r->getInfo()){
+            inIzq.push_back(inorden.front());
+            postIzq.push_back(postorden.front());
 
-            inorden.pop_back();
-            postorden.pop_back();
+            inorden.pop_front();
+            postorden.pop_front();
         }
-        inorden.pop_back(); //eliminar raiz en inorden
+        inorden.pop_front(); //eliminar raiz en inorden
 
         //LLENAR LISTAS DE LA PARTE IZQUIERDA DEL ARBOL (MIENTRAS LAS LISTAS NO ESTÉN VACÍAS)
         while(!inorden.empty()){
-            postIzq.push_front(postorden.back());
-            inIzq.push_front(inorden.back());
+            postDer.push_back(postorden.front());
+            inDer.push_back(inorden.front());
 
-            postorden.pop_back();
-            inorden.pop_back();
+            postorden.pop_front();
+            inorden.pop_front();
         }
 
-        r->setHijoIzq(leerArbol(postIzq, inIzq));
-        r->setHijoDer(leerArbol(postDer, inDer));
+        r->setHijoIzq(leerArbolPostOrden(postIzq, inIzq));
+        r->setHijoDer(leerArbolPostOrden(postDer, inDer));
 
         return r;
 
