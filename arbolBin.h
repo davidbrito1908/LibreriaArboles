@@ -289,7 +289,7 @@ void ArbolBin<Tipo>::LCA(NodoBin<Tipo> *r, Tipo e1, Tipo e2, bool *encontrado1, 
 
                 if(!*LCAEncontrado){
                     *encontrado1 = encontradoe1hi || encontradoe1hd || r->getInfo() == e1;
-                    *encontrado1 = encontradoe2hi || encontradoe2hd || r->getInfo() == e2;
+                    *encontrado2 = encontradoe2hi || encontradoe2hd || r->getInfo() == e2;
 
                     *LCAEncontrado = *encontrado1 && *encontrado2;
 
