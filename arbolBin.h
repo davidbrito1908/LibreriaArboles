@@ -13,13 +13,15 @@ class ArbolBin{
     protected:
         int peso;
         NodoBin<Tipo> *raiz;
+    private:
+        NodoBin<Tipo> * copiarNodos(NodoBin<Tipo> *p);
+
     public:
         void construir();
         void construir(Tipo raiz, ArbolBin hijoIzq, ArbolBin hijoDer);
         void construir(ArbolBin *a);
         bool esNulo();
 
-        NodoBin<Tipo> * copiarNodos(NodoBin<Tipo> *p);
         Tipo infoRaiz();
         //void insertarNodo(Tipo padre, Tipo hijo, NodoBin<Tipo> *raiz, bool *band);
         void crear(int peso, NodoBin<Tipo> * raiz);
@@ -40,6 +42,10 @@ class ArbolBin{
 
         NodoBin<Tipo> *  leerArbol(list<Tipo> preorden, list<Tipo> inorden);
 
+        //Metodos divertidos
+        list<Tipo> getPrimos(Tipo elemento, queue<NodoBin<Tipo>*> actual);
+        void LCA(NodoBin<Tipo> *r, Tipo e1, Tipo e2, bool *encontrado1, bool *encontrado2, bool *LCAEncontrado, Tipo *ancestro);
+        Tipo LCA(Tipo e1, Tipo e2);
 };
 
 template <typename Tipo>
@@ -251,12 +257,111 @@ void ArbolBin<Tipo>::insertarNodo(Tipo padre, Tipo hijo, NodoBin<Tipo> *raiz){
                     raiz->setHijoDer(nuevo);
                     return;
                 }
-            }
-    }
-    else{
-        insertarNodo(padre,hijo,raiz->getHijoIzq());
-        insertarNodo(padre,hijo,raiz->getHijoDer());
+        }else{
+            insertarNodo(padre,hijo,raiz->getHijoIzq());
+            insertarNodo(padre,hijo,raiz->getHijoDer());
+        }
     }
 }
 
+
+/*list<Tipo> getPrimos(Tipo elemento){
+    list<Tipo> result;
+}*/
+template <typename Tipo>
+void ArbolBin<Tipo>::LCA(NodoBin<Tipo> *r, Tipo e1, Tipo e2, bool *encontrado1, bool *encontrado2, bool *LCAEncontrado, Tipo *ancestro){
+    bool encontradoe1hi, encontradoe2hi, encontradoe1hd, encontradoe2hd;
+    
+    
+    if (!*LCAEncontrado){
+        if (r!=nullptr){
+            if ((r->getHijoIzq() == nullptr) && (r->getHijoDer() == nullptr)){
+                *encontrado1 = r->getInfo() == e1;
+                *encontrado2 = r->getInfo() == e2;
+            }else{
+                encontradoe1hi=false;
+                encontradoe1hd=false;
+                encontradoe2hd=false;
+                encontradoe2hi=false;
+
+                this->LCA(r->getHijoIzq(), e1, e2, &encontradoe1hi, &encontradoe2hi, LCAEncontrado, ancestro);
+                this->LCA(r->getHijoDer(), e1, e2, &encontradoe1hd, &encontradoe2hd, LCAEncontrado, ancestro);
+
+                if(!*LCAEncontrado){
+                    *encontrado1 = encontradoe1hi || encontradoe1hd || r->getInfo() == e1;
+                    *encontrado1 = encontradoe2hi || encontradoe2hd || r->getInfo() == e2;
+
+                    *LCAEncontrado = *encontrado1 && *encontrado2;
+
+                    if (*LCAEncontrado) {
+                        *ancestro = r->getInfo();
+                    }
+                }
+            }
+        }
+    }
+}
+
+template <typename Tipo>
+Tipo ArbolBin<Tipo>::LCA(Tipo e1, Tipo e2){
+    bool encontrado1, encontrado2, LCAEncontrado;
+    Tipo Ancestro;
+
+    encontrado1 = false;
+    encontrado2 = false;
+    LCAEncontrado =false;
+    this->LCA(this->getRaiz(), e1, e2, &encontrado1, &encontrado2, &LCAEncontrado, &Ancestro);
+    return Ancestro;
+}
+
+template <typename Tipo>
+list<Tipo> ArbolBin<Tipo>::getPrimos(Tipo elemento, queue<NodoBin<Tipo>*> actual){
+    queue<NodoBin<Tipo>*> sigNivel;
+    bool padre = false, fin =false;;
+    list<Tipo> primos;
+
+    while (!actual.empty()) {
+        padre=false;
+        if (actual.front()->getHijoIzq() != nullptr){
+            //Si el actual es el padre no pongas sus hijos en el siguiente nivel
+            padre = (actual.front()->getHijoIzq()->getInfo() == elemento);
+            if (actual.front()->getHijoDer() != nullptr){
+                padre = padre || (actual.front()->getHijoDer()->getInfo() == elemento);
+            }
+            if(!padre){
+                sigNivel.push(actual.front()->getHijoIzq());
+            }else{
+                fin=true;
+            }
+        }
+        if (actual.front()->getHijoDer() != nullptr){
+
+            //Si el actual es el padre no pongas sus hijos en el siguiente nivel
+            padre = (actual.front()->getHijoDer()->getInfo() == elemento);
+            if (actual.front()->getHijoIzq() != nullptr){
+                padre = padre || (actual.front()->getHijoIzq()->getInfo() == elemento);
+            }
+            if(!padre){
+                sigNivel.push(actual.front()->getHijoDer());
+            }else{
+                fin=true;
+            }
+        }
+        actual.pop();
+    }
+    if (fin){
+        //PASAR DE LA COLA A LA LISTA PRIMOS
+        while(!sigNivel.empty()){
+            primos.push_back(sigNivel.front()->getInfo());
+            sigNivel.pop();
+        }
+        return primos;
+
+    }else{
+        if(!sigNivel.empty()){
+            primos = getPrimos(elemento, sigNivel);
+        }
+    }
+    return primos;
+}
 #endif

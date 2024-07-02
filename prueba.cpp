@@ -10,9 +10,9 @@ int main(){
     
 
     hi.crear(2,nullptr,nullptr);
-    hd.crear(3,nullptr,nullptr);
-    //r.crear(1,&hi,&hd);
-    r.crear(1, nullptr, &hd);
+    hd.crear(5,nullptr,nullptr);
+    r.crear(1,&hi,&hd);
+    //r.crear(1, nullptr, &hd);
     NodoBin<int> r2, hi2,hd2;
     hi2.crear(5,nullptr,nullptr);
     hd2.crear(6,nullptr,nullptr);
@@ -22,9 +22,26 @@ int main(){
 
     A.construir();
     A.setRaiz(&r);
-    A.insertarNodo(1,7,A.getRaiz());
-    A.imprimirPreOrden(A.getRaiz());
+    //A.insertarNodo(1,7,A.getRaiz());
+    A.insertarNodo(2,3,A.getRaiz());
+    A.insertarNodo(2,4,A.getRaiz());
+    A.insertarNodo(5,6,A.getRaiz());
+    A.insertarNodo(5,7,A.getRaiz());
+    A.insertarNodo(7,9,A.getRaiz());
+    A.insertarNodo(6,8,A.getRaiz());
+    //A.imprimirPreOrden(A.getRaiz());
 
+    //int ancestro = A.LCA(3,4);
+    queue<NodoBin<int>*> c;
+    c.push(A.getRaiz());
+    //A.imprimirPorNiveles(c);
+    list<int> primos = A.getPrimos(8, c);
+    while (!primos.empty()){
+        cout << primos.front()<<endl;
+        primos.pop_front();
+    }
+    //cout<<endl<<ancestro;
+    B.copiar(&A);
     //B = A.hijoIzq();
     //B.imprimirPreOrden(B.getRaiz());
     //C= A.hijoDer();
