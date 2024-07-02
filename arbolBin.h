@@ -45,6 +45,10 @@ class ArbolBin{
         
 
         //RECORRIDOS ==============================================
+        void imprimirPreOrden(); //
+        void imprimirPostOrden(); //
+        void imprimirInOrden(); //
+        void imprimirPorNiveles(); //
         void imprimirPreOrden(NodoBin<Tipo> *raiz); //
         void imprimirPostOrden(NodoBin<Tipo> *raiz); //
         void imprimirInOrden(NodoBin<Tipo> *raiz); //
@@ -231,6 +235,27 @@ void ArbolBin<Tipo>::eliminarSubarbol(int pos) {
 
 //RECORRIDOS =============================================================================
 
+template <typename Tipo>
+void ArbolBin<Tipo>::imprimirPreOrden(){
+    NodoBin<Tipo> *raiz = this->getRaiz();
+    this->imprimirPreOrden(raiz);
+}
+template <typename Tipo>
+void ArbolBin<Tipo>::imprimirPostOrden(){
+    NodoBin<Tipo> *raiz = this->getRaiz();
+    this->imprimirPostOrden(raiz);
+}
+template <typename Tipo>
+void ArbolBin<Tipo>::imprimirInOrden(){
+    NodoBin<Tipo> *raiz = this->getRaiz();
+    this->imprimirInOrden(raiz);
+}
+template <typename Tipo>
+void ArbolBin<Tipo>::imprimirPorNiveles(){
+    queue<NodoBin<Tipo>*> c;
+    c.push(this->getRaiz());
+    this->imprimirPorNiveles(c);
+}
 template <typename Tipo>
 void ArbolBin<Tipo>::imprimirPreOrden(NodoBin<Tipo> *raiz){
     if (raiz==nullptr){

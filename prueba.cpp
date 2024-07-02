@@ -68,13 +68,13 @@ int main(){
     //D.construir();
        list<int> preorden, inorden;
 
+    preorden.push_back(1);
     preorden.push_back(2);
     preorden.push_back(3);
     preorden.push_back(4);
     preorden.push_back(5);
     preorden.push_back(6);
     preorden.push_back(7);
-    preorden.push_back(1);
 
     inorden.push_back(3);
     inorden.push_back(2);
@@ -84,13 +84,13 @@ int main(){
     inorden.push_back(5);
     inorden.push_back(7);
 
-    A.setRaiz(A.leerArbolPostOrden(preorden, inorden));
+    A.setRaiz(A.leerArbol(preorden, inorden));
     //A.imprimirPreOrden(A.getRaiz());
     //A.imprimirPostOrden(A.getRaiz());
     //A.imprimirInOrden(A.getRaiz());
 
     //queue<NodoBin<int>*> c;
     c.push(A.getRaiz());
-    A.imprimirPreOrden(A.getRaiz());
+    A.imprimirPorNiveles();
     return 0;
 }
