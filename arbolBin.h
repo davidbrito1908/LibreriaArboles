@@ -17,39 +17,48 @@ class ArbolBin{
         NodoBin<Tipo> * copiarNodos(NodoBin<Tipo> *p);
 
     public:
+        //CONSTRUCTORES
         void construir();
-        void construir(Tipo raiz, ArbolBin hijoIzq = nullptr, ArbolBin hijoDer = nullptr);
-        void construir(ArbolBin *a);
-        bool esNulo();
-
-        Tipo infoRaiz();
-        //void insertarNodo(Tipo padre, Tipo hijo, NodoBin<Tipo> *raiz, bool *band);
+        void construir(Tipo raiz, ArbolBin hijoIzq = nullptr, ArbolBin hijoDer = nullptr); //
+        void construir(ArbolBin *a); //
         void crear(int peso, NodoBin<Tipo> * raiz);
+        
+        void copiar(ArbolBin<Tipo> *a); //
+        
+        //GETTERS
         int getPeso();
-        NodoBin<Tipo> * getRaiz();
-        ArbolBin<Tipo> hijoIzq();
-        ArbolBin<Tipo> hijoDer();
+        NodoBin<Tipo> * getRaiz(); //
+        Tipo infoRaiz(); //
+        ArbolBin<Tipo> hijoIzq();//
+        ArbolBin<Tipo> hijoDer();//
+        
+        //SETTERS
         void setPeso(int peso);
-        void setRaiz(NodoBin<Tipo> * apuntador);
-        void copiar(ArbolBin<Tipo> *a);
-        void destruir();
-        void insertarNodo(Tipo padre, Tipo hijo, NodoBin<Tipo> *raiz);
-        void insertarSubarbol(ArbolBin<Tipo> subarbol);
+        void setRaiz(NodoBin<Tipo> * apuntador);//
+
+        //INSERTAR Y ELIMINAR
+        void insertarNodo(Tipo padre, Tipo hijo, NodoBin<Tipo> *raiz);//
+        void insertarSubarbol(ArbolBin<Tipo> subarbol);//
         void eliminarSubarbol(int pos); //NO LOS ELIMINA COMO TAL
         //void destruirNodos(NodoBin<Tipo> *p); //HACER
+        void destruir();
+        
 
-        void imprimirPreOrden(NodoBin<Tipo> *raiz);
-        void imprimirPostOrden(NodoBin<Tipo> *raiz);
-        void imprimirInOrden(NodoBin<Tipo> *raiz);
-        void imprimirPorNiveles(queue<NodoBin<Tipo>*> actual);
+        //RECORRIDOS
+        void imprimirPreOrden(NodoBin<Tipo> *raiz); //
+        void imprimirPostOrden(NodoBin<Tipo> *raiz); //
+        void imprimirInOrden(NodoBin<Tipo> *raiz); //
+        void imprimirPorNiveles(queue<NodoBin<Tipo>*> actual); //
 
-        NodoBin<Tipo> *  leerArbol(list<Tipo> preorden, list<Tipo> inorden);
-        NodoBin<Tipo> *  leerArbolPostOrden(list<Tipo> preorden, list<Tipo> inorden);
+        //LECTURAS
+        NodoBin<Tipo> *  leerArbol(list<Tipo> preorden, list<Tipo> inorden); //
+        NodoBin<Tipo> *  leerArbolPostOrden(list<Tipo> postorden, list<Tipo> inorden); //
 
-        //Metodos divertidos
+        //Metodos divertidos - VARIOS
+        bool esNulo();//
         list<Tipo> getPrimos(Tipo elemento, queue<NodoBin<Tipo>*> actual);
-        void LCA(NodoBin<Tipo> *r, Tipo e1, Tipo e2, bool *encontrado1, bool *encontrado2, bool *LCAEncontrado, Tipo *ancestro);
-        Tipo LCA(Tipo e1, Tipo e2);
+        void LCA(NodoBin<Tipo> *r, Tipo e1, Tipo e2, bool *encontrado1, bool *encontrado2, bool *LCAEncontrado, Tipo *ancestro);//
+        Tipo LCA(Tipo e1, Tipo e2);//
 };
 
 template <typename Tipo>
