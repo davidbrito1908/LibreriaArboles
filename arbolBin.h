@@ -18,7 +18,7 @@ class ArbolBin{
 
     public:
         void construir();
-        void construir(Tipo raiz, ArbolBin hijoIzq, ArbolBin hijoDer);
+        void construir(Tipo raiz, ArbolBin hijoIzq = nullptr, ArbolBin hijoDer = nullptr);
         void construir(ArbolBin *a);
         bool esNulo();
 
@@ -44,6 +44,7 @@ class ArbolBin{
         void imprimirPorNiveles(queue<NodoBin<Tipo>*> actual);
 
         NodoBin<Tipo> *  leerArbol(list<Tipo> preorden, list<Tipo> inorden);
+        NodoBin<Tipo> *  leerArbolPostOrden(list<Tipo> preorden, list<Tipo> inorden);
 
         //Metodos divertidos
         list<Tipo> getPrimos(Tipo elemento, queue<NodoBin<Tipo>*> actual);
@@ -209,6 +210,49 @@ NodoBin<Tipo> * ArbolBin<Tipo>::leerArbol(list<Tipo> preorden, list<Tipo> inorde
 
         r->setHijoIzq(leerArbol(preIzq, inIzq));
         r->setHijoDer(leerArbol(preDer, inDer));
+
+        return r;
+
+    }else{
+        return nullptr;
+    }
+
+}
+
+
+template <typename Tipo>
+NodoBin<Tipo> * ArbolBin<Tipo>::leerArbolPostOrden(list<Tipo> postorden, list<Tipo> inorden){
+    
+    NodoBin<Tipo> *r;
+    list<Tipo> postIzq, postDer, inIzq, inDer;
+
+    if(!postorden.empty()){
+        r = new (NodoBin<Tipo>);
+        r->setInfo(postorden.back());
+        postorden.pop_back();
+
+
+        //LLENAR LISTAS DE LA PARTE DERECHA DEL ARBOL (MIENTRAS NO SE ENCUENTRE LA RAIZ EN EL INORDEN)
+        while(inorden.back() != r->getInfo()){
+            inDer.push_front(inorden.back());
+            postDer.push_front(postorden.back());
+
+            inorden.pop_back();
+            postorden.pop_back();
+        }
+        inorden.pop_back(); //eliminar raiz en inorden
+
+        //LLENAR LISTAS DE LA PARTE IZQUIERDA DEL ARBOL (MIENTRAS LAS LISTAS NO ESTÉN VACÍAS)
+        while(!inorden.empty()){
+            postIzq.push_front(postorden.back());
+            inIzq.push_front(inorden.back());
+
+            postorden.pop_back();
+            inorden.pop_back();
+        }
+
+        r->setHijoIzq(leerArbol(postIzq, inIzq));
+        r->setHijoDer(leerArbol(postDer, inDer));
 
         return r;
 

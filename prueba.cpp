@@ -9,26 +9,26 @@ int main(){
     NodoBin<int> r, hi,hd;
     
 
-    hi.crear(2,nullptr,nullptr);
-    hd.crear(5,nullptr,nullptr);
+    hi.crear(2);
+    hd.crear(5);
     r.crear(1,&hi,&hd);
     //r.crear(1, nullptr, &hd);
     NodoBin<int> r2, hi2,hd2;
-    hi2.crear(5,nullptr,nullptr);
-    hd2.crear(6,nullptr,nullptr);
+    hi2.crear(5);
+    hd2.crear(6);
     r2.crear(4,&hi2,&hd2);
 
-    //B.setRaiz(&r2);
+    B.setRaiz(&r2);
 
     A.construir();
-    A.setRaiz(&r);
+    //A.setRaiz(&r);
     //A.insertarNodo(1,7,A.getRaiz());
-    A.insertarNodo(2,3,A.getRaiz());
+    /*A.insertarNodo(2,3,A.getRaiz());
     A.insertarNodo(2,4,A.getRaiz());
     A.insertarNodo(5,6,A.getRaiz());
     A.insertarNodo(5,7,A.getRaiz());
     A.insertarNodo(7,9,A.getRaiz());
-    A.insertarNodo(6,8,A.getRaiz());
+    A.insertarNodo(6,8,A.getRaiz());*/
     //A.imprimirPreOrden(A.getRaiz());
 
     //int ancestro = A.LCA(3,4);
@@ -50,7 +50,7 @@ int main(){
     //B.imprimirPorNiveles(c);
 
 
-    C.construir();
+    /*C.construir();
     NodoBin<int> r3, r4;
     r3.crear(9, nullptr, nullptr);
     r4.crear(2, nullptr, nullptr);
@@ -59,22 +59,22 @@ int main(){
     C.insertarSubarbol(B);
     C.eliminarSubarbol(1);
     C.insertarSubarbol(A);
-    C.imprimirPreOrden(C.getRaiz());
+    C.imprimirPreOrden(C.getRaiz());*/
     //B = A.hijoIzq();
     //B.imprimirPreOrden(B.getRaiz());
     //C= A.hijoDer();
     //D.construir(A.infoRaiz(), B, C);
     //D.imprimirPreOrden(D.getRaiz());
     //D.construir();
-    /*   list<int> preorden, inorden;
+       list<int> preorden, inorden;
 
-    preorden.push_back(1);
     preorden.push_back(2);
     preorden.push_back(3);
     preorden.push_back(4);
     preorden.push_back(5);
     preorden.push_back(6);
     preorden.push_back(7);
+    preorden.push_back(1);
 
     inorden.push_back(3);
     inorden.push_back(2);
@@ -84,13 +84,13 @@ int main(){
     inorden.push_back(5);
     inorden.push_back(7);
 
-    A.setRaiz(A.leerArbol(preorden, inorden));
+    A.setRaiz(A.leerArbolPostOrden(preorden, inorden));
     //A.imprimirPreOrden(A.getRaiz());
     //A.imprimirPostOrden(A.getRaiz());
     //A.imprimirInOrden(A.getRaiz());
 
-    queue<NodoBin<int>*> c;
+    //queue<NodoBin<int>*> c;
     c.push(A.getRaiz());
-    A.imprimirPorNiveles(c);*/
+    A.imprimirPreOrden(A.getRaiz());
     return 0;
 }

@@ -9,7 +9,7 @@ class NodoBin{
         Tipo info;
         NodoBin<Tipo> *hijoIzq, *hijoDer;
     public:
-        void crear(Tipo elemento, NodoBin<Tipo> * hijoIzq, NodoBin<Tipo>*hijoDer);
+        void crear(Tipo elemento, NodoBin<Tipo> * hijoIzq = nullptr, NodoBin<Tipo>*hijoDer = nullptr);
         Tipo getInfo();
         NodoBin<Tipo> * getHijoIzq();
         NodoBin<Tipo> * getHijoDer();
