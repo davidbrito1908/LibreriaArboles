@@ -17,7 +17,7 @@ class ArbolBin{
         NodoBin<Tipo> * copiarNodos(NodoBin<Tipo> *p);
 
     public:
-        //CONSTRUCTORES
+        //CONSTRUCTORES ==============================================
         void construir();
         void construir(Tipo raiz, ArbolBin hijoIzq = nullptr, ArbolBin hijoDer = nullptr); //
         void construir(ArbolBin *a); //
@@ -25,18 +25,18 @@ class ArbolBin{
         
         void copiar(ArbolBin<Tipo> *a); //
         
-        //GETTERS
+        //GETTERS ==============================================
         int getPeso();
         NodoBin<Tipo> * getRaiz(); //
         Tipo infoRaiz(); //
         ArbolBin<Tipo> hijoIzq();//
         ArbolBin<Tipo> hijoDer();//
         
-        //SETTERS
+        //SETTERS ==============================================
         void setPeso(int peso);
         void setRaiz(NodoBin<Tipo> * apuntador);//
 
-        //INSERTAR Y ELIMINAR
+        //INSERTAR Y ELIMINAR ==============================================
         void insertarNodo(Tipo padre, Tipo hijo, NodoBin<Tipo> *raiz);//
         void insertarSubarbol(ArbolBin<Tipo> subarbol);//
         void eliminarSubarbol(int pos); //NO LOS ELIMINA COMO TAL
@@ -44,39 +44,24 @@ class ArbolBin{
         void destruir();
         
 
-        //RECORRIDOS
+        //RECORRIDOS ==============================================
         void imprimirPreOrden(NodoBin<Tipo> *raiz); //
         void imprimirPostOrden(NodoBin<Tipo> *raiz); //
         void imprimirInOrden(NodoBin<Tipo> *raiz); //
         void imprimirPorNiveles(queue<NodoBin<Tipo>*> actual); //
 
-        //LECTURAS
+        //LECTURAS ==============================================
         NodoBin<Tipo> *  leerArbol(list<Tipo> preorden, list<Tipo> inorden); //
         NodoBin<Tipo> *  leerArbolPostOrden(list<Tipo> postorden, list<Tipo> inorden); //
 
-        //Metodos divertidos - VARIOS
+        //Metodos divertidos - VARIOS ==============================================
         bool esNulo();//
         list<Tipo> getPrimos(Tipo elemento, queue<NodoBin<Tipo>*> actual);
         void LCA(NodoBin<Tipo> *r, Tipo e1, Tipo e2, bool *encontrado1, bool *encontrado2, bool *LCAEncontrado, Tipo *ancestro);//
         Tipo LCA(Tipo e1, Tipo e2);//
 };
 
-template <typename Tipo>
-void ArbolBin<Tipo>::construir(){
-    this->setRaiz(nullptr);
-}
 
-template <typename Tipo>
-void ArbolBin<Tipo>::crear(int peso, NodoBin<Tipo> * raiz){
-    this->setPeso(peso);
-    this->setRaiz(raiz);
-}
-
-
-template <typename Tipo>
-NodoBin<Tipo> * ArbolBin<Tipo>::getRaiz(){
-    return this->raiz;
-}
 
 template <typename Tipo>
 NodoBin<Tipo>* ArbolBin<Tipo>::copiarNodos(NodoBin<Tipo> *p){
@@ -89,6 +74,23 @@ NodoBin<Tipo>* ArbolBin<Tipo>::copiarNodos(NodoBin<Tipo> *p){
         nuevo->crear(p->getInfo(), p->getHijoIzq(), p->getHijoDer());
         return(nuevo);
     }
+}
+
+
+
+
+
+//CONSTRUCTORES =============================================================================
+
+template <typename Tipo>
+void ArbolBin<Tipo>::construir(){
+    this->setRaiz(nullptr);
+}
+
+template <typename Tipo>
+void ArbolBin<Tipo>::crear(int peso, NodoBin<Tipo> * raiz){
+    this->setPeso(peso);
+    this->setRaiz(raiz);
 }
 
 template <typename Tipo>
@@ -110,9 +112,15 @@ void ArbolBin<Tipo>::copiar(ArbolBin<Tipo> *a){
     this->raiz = copiarNodos(a->getRaiz());
 }
 
+
+
+
+
+//GETTERS  =============================================================================
+
 template <typename Tipo>
-bool ArbolBin<Tipo>::esNulo(){
-    return (this->raiz == nullptr);
+NodoBin<Tipo> * ArbolBin<Tipo>::getRaiz(){
+    return this->raiz;
 }
 
 template <typename Tipo>
@@ -125,6 +133,7 @@ ArbolBin<Tipo> ArbolBin<Tipo>::hijoIzq(){
     }
     return (hijo);
 }
+
 template <typename Tipo>
 ArbolBin<Tipo> ArbolBin<Tipo>::hijoDer(){
     ArbolBin<Tipo> hijo;
@@ -135,11 +144,16 @@ ArbolBin<Tipo> ArbolBin<Tipo>::hijoDer(){
     }
     return (hijo);
 }
+
 template <typename Tipo>
 Tipo ArbolBin<Tipo>::infoRaiz(){
     return (this->getRaiz()->getInfo());
 }
 
+
+
+
+//SETTERS =============================================================================
 
 template <typename Tipo>
 void ArbolBin<Tipo>::setPeso(int peso){
@@ -151,6 +165,71 @@ void ArbolBin<Tipo>::setRaiz(NodoBin<Tipo> * apuntador){
     this->raiz = apuntador;
 }
 
+
+
+
+
+// INSERTAR ===========================================================================
+
+template <typename Tipo>
+void ArbolBin<Tipo>::insertarNodo(Tipo padre, Tipo hijo, NodoBin<Tipo> *raiz){
+    NodoBin<Tipo> *nuevo, *aux;
+
+    if(raiz != nullptr){
+        nuevo = new(NodoBin<Tipo>);
+        nuevo->setInfo(hijo);
+        nuevo->setHijoIzq(nullptr);
+        nuevo->setHijoDer(nullptr);
+
+        if(raiz->getInfo() == padre){
+                if (raiz->getHijoIzq() == nullptr){
+                    raiz->setHijoIzq(nuevo);
+                    return;
+                }
+                if (raiz->getHijoDer() == nullptr){
+                    raiz->setHijoDer(nuevo);
+                    return;
+                }
+        }else{
+            insertarNodo(padre,hijo,raiz->getHijoIzq());
+            insertarNodo(padre,hijo,raiz->getHijoDer());
+        }
+    }
+}
+
+template <typename Tipo>
+void ArbolBin<Tipo>::insertarSubarbol(ArbolBin<Tipo> subarbol){
+    if (this->getRaiz()->getHijoIzq() == nullptr){
+        this->getRaiz()->setHijoIzq(copiarNodos(subarbol.getRaiz()));
+    }else{
+        if (this->getRaiz()->getHijoDer() == nullptr){
+            this->getRaiz()->setHijoDer(copiarNodos(subarbol.getRaiz()));
+        }
+    }
+}
+
+template <typename Tipo>
+void ArbolBin<Tipo>::eliminarSubarbol(int pos) {
+    NodoBin<Tipo> *aux;
+    int i;
+
+    if (pos==1){
+        aux = this->getRaiz()->getHijoIzq();
+        this->getRaiz()->setHijoIzq(this->getRaiz()->getHijoDer());
+        this->getRaiz()->setHijoDer(nullptr);
+    }
+    else{
+        aux = this->getRaiz()->getHijoDer();
+        this->getRaiz()->setHijoDer(nullptr);
+    }
+
+}
+
+
+
+
+
+//RECORRIDOS =============================================================================
 
 template <typename Tipo>
 void ArbolBin<Tipo>::imprimirPreOrden(NodoBin<Tipo> *raiz){
@@ -183,8 +262,36 @@ void ArbolBin<Tipo>::imprimirInOrden(NodoBin<Tipo> *raiz){
     }
 }
 
+template <typename Tipo>
+void ArbolBin<Tipo>::imprimirPorNiveles(queue<NodoBin<Tipo>*> actual){
+    queue<NodoBin<Tipo>*> sigNivel;
+    int hijos = 0;
+
+    cout<<endl;
+    while (!actual.empty()) {
+        hijos=0;
+        if (actual.front()->getHijoIzq() != nullptr){
+            sigNivel.push(actual.front()->getHijoIzq());
+            hijos++;
+        }
+        if (actual.front()->getHijoDer() != nullptr){
+            sigNivel.push(actual.front()->getHijoDer());
+            hijos++;
+        }
+        
+        cout << actual.front()->getInfo() << " (" << hijos << ") "<< "  ";
+        actual.pop();
+    }
+    if(!sigNivel.empty()){
+        imprimirPorNiveles(sigNivel);
+    }
+}
 
 
+
+
+
+//LECTURAS =============================================================================
 
 template <typename Tipo>
 NodoBin<Tipo> * ArbolBin<Tipo>::leerArbol(list<Tipo> preorden, list<Tipo> inorden){
@@ -271,85 +378,15 @@ NodoBin<Tipo> * ArbolBin<Tipo>::leerArbolPostOrden(list<Tipo> postorden, list<Ti
 
 }
 
-template <typename Tipo>
-void ArbolBin<Tipo>::imprimirPorNiveles(queue<NodoBin<Tipo>*> actual){
-    queue<NodoBin<Tipo>*> sigNivel;
-    int hijos = 0;
 
-    cout<<endl;
-    while (!actual.empty()) {
-        hijos=0;
-        if (actual.front()->getHijoIzq() != nullptr){
-            sigNivel.push(actual.front()->getHijoIzq());
-            hijos++;
-        }
-        if (actual.front()->getHijoDer() != nullptr){
-            sigNivel.push(actual.front()->getHijoDer());
-            hijos++;
-        }
-        
-        cout << actual.front()->getInfo() << " (" << hijos << ") "<< "  ";
-        actual.pop();
-    }
-    if(!sigNivel.empty()){
-        imprimirPorNiveles(sigNivel);
-    }
-}
+//VARIOS =============================================================================
 
 
 template <typename Tipo>
-void ArbolBin<Tipo>::insertarNodo(Tipo padre, Tipo hijo, NodoBin<Tipo> *raiz){
-    NodoBin<Tipo> *nuevo, *aux;
-
-    if(raiz != nullptr){
-        nuevo = new(NodoBin<Tipo>);
-        nuevo->setInfo(hijo);
-        nuevo->setHijoIzq(nullptr);
-        nuevo->setHijoDer(nullptr);
-
-        if(raiz->getInfo() == padre){
-                if (raiz->getHijoIzq() == nullptr){
-                    raiz->setHijoIzq(nuevo);
-                    return;
-                }
-                if (raiz->getHijoDer() == nullptr){
-                    raiz->setHijoDer(nuevo);
-                    return;
-                }
-        }else{
-            insertarNodo(padre,hijo,raiz->getHijoIzq());
-            insertarNodo(padre,hijo,raiz->getHijoDer());
-        }
-    }
+bool ArbolBin<Tipo>::esNulo(){
+    return (this->raiz == nullptr);
 }
 
-template <typename Tipo>
-void ArbolBin<Tipo>::insertarSubarbol(ArbolBin<Tipo> subarbol){
-    if (this->getRaiz()->getHijoIzq() == nullptr){
-        this->getRaiz()->setHijoIzq(copiarNodos(subarbol.getRaiz()));
-    }else{
-        if (this->getRaiz()->getHijoDer() == nullptr){
-            this->getRaiz()->setHijoDer(copiarNodos(subarbol.getRaiz()));
-        }
-    }
-}
-
-template <typename Tipo>
-void ArbolBin<Tipo>::eliminarSubarbol(int pos) {
-    NodoBin<Tipo> *aux;
-    int i;
-
-    if (pos==1){
-        aux = this->getRaiz()->getHijoIzq();
-        this->getRaiz()->setHijoIzq(this->getRaiz()->getHijoDer());
-        this->getRaiz()->setHijoDer(nullptr);
-    }
-    else{
-        aux = this->getRaiz()->getHijoDer();
-        this->getRaiz()->setHijoDer(nullptr);
-    }
-
-}
 
 template <typename Tipo>
 void ArbolBin<Tipo>::LCA(NodoBin<Tipo> *r, Tipo e1, Tipo e2, bool *encontrado1, bool *encontrado2, bool *LCAEncontrado, Tipo *ancestro){
