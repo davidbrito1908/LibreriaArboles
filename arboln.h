@@ -37,11 +37,15 @@ class ArbolN{
         void setRaiz(Nodo<Tipo> * r);
     //INSERTAR ==============================================
         void insertarNodo(Tipo padre, Tipo hijo, Nodo<Tipo> *raiz);
+        void insertarNodo(Tipo padre, Tipo hijo);
         void insertarSubarbol(ArbolN<Tipo> arbol);
         void eliminarSubarbol (int pos);
         
     //RECORRIDOS ==============================================
-
+        void imprimirPreOrden(); //
+        void imprimirPostOrden(); //
+        void imprimirInOrden(); //
+        void imprimirPorNiveles(); //
 
         void imprimirPreOrden(Nodo<Tipo> *raiz);
         void imprimirPostOrden(Nodo<Tipo> *raiz);
@@ -248,11 +252,15 @@ void ArbolN<Tipo>::insertarNodo(Tipo padre, Tipo hijo, Nodo<Tipo> *raiz){
             }
         }
         else{
-            insertarNodo(padre,hijo,raiz->getHijoIzq());
-            insertarNodo(padre,hijo,raiz->getHerDer());
+            this->insertarNodo(padre,hijo,raiz->getHijoIzq());
+            this->insertarNodo(padre,hijo,raiz->getHerDer());
         }
     }
     
+}
+template <typename Tipo>
+void ArbolN<Tipo>::insertarNodo(Tipo padre, Tipo hijo){
+    this->insertarNodo(padre,hijo, this->raiz);
 }
 
 
@@ -263,19 +271,27 @@ void ArbolN<Tipo>::imprimirPreOrden(Nodo<Tipo> *raiz){
         return;
     }else{
         cout << raiz->getInfo() << " ";
-        imprimirPreOrden(raiz->getHijoIzq());
-        imprimirPreOrden(raiz->getHerDer());
+        this->imprimirPreOrden(raiz->getHijoIzq());
+        this->imprimirPreOrden(raiz->getHerDer());
     }
+}
+template <typename Tipo>
+void ArbolN<Tipo>::imprimirPreOrden(){
+    this->imprimirPreOrden(this->raiz);
 }
 template <typename Tipo>
 void ArbolN<Tipo>::imprimirPostOrden(Nodo<Tipo> *raiz){
     if (raiz==nullptr){
         return;
     }else{
-        imprimirPostOrden(raiz->getHijoIzq());
-        imprimirPostOrden(raiz->getHerDer());
+        this->imprimirPostOrden(raiz->getHijoIzq());
         cout << raiz->getInfo() << " ";
+        this->imprimirPostOrden(raiz->getHerDer());
     }
+}
+template <typename Tipo>
+void ArbolN<Tipo>::imprimirPostOrden(){
+    this->imprimirPostOrden(this->raiz);
 }
 template <typename Tipo>
 void ArbolN<Tipo>::imprimirInOrden(Nodo<Tipo> *raiz){
@@ -284,16 +300,20 @@ void ArbolN<Tipo>::imprimirInOrden(Nodo<Tipo> *raiz){
     if (raiz==nullptr){
         return;
     }else{
-        imprimirInOrden(raiz->getHijoIzq());
+        this->imprimirInOrden(raiz->getHijoIzq());
         cout << raiz->getInfo() << " ";
         if(raiz->getHijoIzq() != nullptr){
             aux = raiz->getHijoIzq()->getHerDer();
             while(aux != nullptr){
-                imprimirInOrden(aux);
+                this->imprimirInOrden(aux);
                 aux = aux->getHerDer();
             }
         }
     }
+}
+template <typename Tipo>
+void ArbolN<Tipo>::imprimirInOrden(){
+    this->imprimirInOrden(this->raiz);
 }
 template <typename Tipo>
 void ArbolN<Tipo>::imprimirPorNiveles(queue<Nodo<Tipo>*> actual){
@@ -320,8 +340,14 @@ void ArbolN<Tipo>::imprimirPorNiveles(queue<Nodo<Tipo>*> actual){
         actual.pop();
     }
     if(!sigNivel.empty()){
-        imprimirPorNiveles(sigNivel);
+        this->imprimirPorNiveles(sigNivel);
     }
+}
+template <typename Tipo>
+void ArbolN<Tipo>::imprimirPorNiveles(){
+    queue<Nodo<Tipo>*> actual;
+    actual.push(this->raiz);
+    this->imprimirPorNiveles(actual);
 }
 
 

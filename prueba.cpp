@@ -10,7 +10,11 @@ int main(){
     A.construir();
     A.setInfoRaiz(1);
     A.insertarNodo(1,2,A.getRaiz());
-
+    A.insertarNodo(1,3,A.getRaiz());
+    A.insertarNodo(1,4,A.getRaiz());
+    A.insertarNodo(2,8,A.getRaiz());
+    A.insertarNodo(3,9,A.getRaiz());
+    A.imprimirPostOrden();
 
     return 0;
 }
