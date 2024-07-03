@@ -52,6 +52,13 @@ class ArbolN{
         void imprimirInOrden(Nodo<Tipo> *raiz);
         void imprimirPorNiveles(queue<Nodo<Tipo>*> actual);
 
+        void preOrden(Nodo<Tipo> *raiz, list<Tipo> *L);
+        list<Tipo> preOrden();
+        void postOrden(Nodo<Tipo> *raiz, list<Tipo> *L);
+        list<Tipo> postOrden();
+        void inOrden(Nodo<Tipo> *raiz, list<Tipo> *L);
+        list<Tipo> inOrden();
+
     //VARIOS ==============================================
 
         bool esNulo();
@@ -281,12 +288,16 @@ void ArbolN<Tipo>::imprimirPreOrden(){
 }
 template <typename Tipo>
 void ArbolN<Tipo>::imprimirPostOrden(Nodo<Tipo> *raiz){
+    Nodo<Tipo> *aux;
     if (raiz==nullptr){
         return;
     }else{
-        this->imprimirPostOrden(raiz->getHijoIzq());
+        aux = raiz->getHijoIzq();
+        while(aux != nullptr){
+            this->imprimirPostOrden(aux);
+            aux=aux->getHerDer();
+        }
         cout << raiz->getInfo() << " ";
-        this->imprimirPostOrden(raiz->getHerDer());
     }
 }
 template <typename Tipo>
@@ -350,5 +361,61 @@ void ArbolN<Tipo>::imprimirPorNiveles(){
     this->imprimirPorNiveles(actual);
 }
 
+
+template <typename Tipo>
+void ArbolN<Tipo>::preOrden(Nodo<Tipo> *raiz, list<Tipo> *L){
+    if (raiz!=nullptr){
+        L->push_back(raiz->getInfo());
+        this->preOrden(raiz->getHijoIzq(), L);
+        this->preOrden(raiz->getHerDer(), L);
+    }
+}
+template <typename Tipo>
+list<Tipo> ArbolN<Tipo>::preOrden(){
+    list<Tipo> L;
+    this->preOrden(this->raiz, &L);
+    return L;
+}
+
+template <typename Tipo>
+void ArbolN<Tipo>::postOrden(Nodo<Tipo> *raiz, list<Tipo> *L){
+    Nodo<Tipo> *aux;
+    if (raiz!=nullptr){
+        aux = raiz->getHijoIzq();
+        while(aux != nullptr){
+            this->postOrden(aux, L);
+            aux=aux->getHerDer();
+        }
+        //this->postOrden(raiz->getHerDer(), L);
+        L->push_back(raiz->getInfo());
+    }
+}
+template <typename Tipo>
+list<Tipo> ArbolN<Tipo>::postOrden(){
+    list<Tipo> L;
+    this->postOrden(this->raiz, &L);
+    return L;
+}
+template <typename Tipo>
+void ArbolN<Tipo>::inOrden(Nodo<Tipo> *raiz, list<Tipo> *L){
+    Nodo<Tipo> *aux;
+    if (raiz!=nullptr){
+        this->inOrden(raiz->getHijoIzq(), L);
+        L->push_back(raiz->getInfo());
+        if(raiz->getHijoIzq() != nullptr){
+            aux = raiz->getHijoIzq()->getHerDer();
+            while(aux != nullptr){
+                this->inOrden(aux, L);
+                aux = aux->getHerDer();
+            }
+        }
+    }
+}
+template <typename Tipo>
+list<Tipo> ArbolN<Tipo>::inOrden(){
+    list<Tipo> L;
+    this->inOrden(this->raiz, &L);
+    return L;
+}
 
 #endif

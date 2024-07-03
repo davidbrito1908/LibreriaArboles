@@ -13,9 +13,13 @@ int main(){
     A.insertarNodo(1,3,A.getRaiz());
     A.insertarNodo(1,4,A.getRaiz());
     A.insertarNodo(2,8,A.getRaiz());
+    A.insertarNodo(2,10,A.getRaiz());
     A.insertarNodo(3,9,A.getRaiz());
-    A.imprimirPostOrden();
-
+    A.imprimirInOrden();
+    /*while(!L.empty()){
+        cout<<L.front();
+        L.pop_front();
+    }*/
     return 0;
 }
 
