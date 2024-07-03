@@ -80,6 +80,8 @@ class ArbolBin{
         list<Tipo> camino(Tipo e1,Tipo e2);
         void caminoNodos(NodoBin<Tipo>* ptr, Tipo e, bool *band, list<Tipo> *camino);
         queue<NodoBin<Tipo>*> hojas (queue<NodoBin<Tipo>*> actual);
+        list<Tipo> getHojas();
+        void getHojas(NodoBin<Tipo> *raiz, list<Tipo> *L);
 };
 
 
@@ -716,7 +718,7 @@ void ArbolBin<Tipo>::caminoNodos(NodoBin<Tipo>* ptr, Tipo e, bool *band, list<Ti
             camino->push_front(ptr->getInfo());
         }
     }
-}
+}/*
 template<typename Tipo>
 queue<NodoBin<Tipo>*> ArbolBin<Tipo>::hojas (queue<NodoBin<Tipo>*> actual){
     queue<NodoBin<Tipo>*> sigNivel, h;
@@ -745,5 +747,29 @@ queue<NodoBin<Tipo>*> ArbolBin<Tipo>::hojas (queue<NodoBin<Tipo>*> actual){
     }
     
 }
+*/
+template <typename Tipo>
+
+void ArbolBin<Tipo>::getHojas(NodoBin<Tipo> *raiz, list<Tipo> *L){
+    if (raiz!=nullptr){
+        if((raiz->getHijoIzq() == nullptr) && (raiz->getHijoDer() == nullptr)){
+            L->push_back(raiz->getInfo());
+        }
+        this->getHojas(raiz->getHijoIzq(), L);
+        this->getHojas(raiz->getHijoDer(), L);
+
+    }
+
+}
+
+template <typename Tipo>
+
+list<Tipo> ArbolBin<Tipo>::getHojas(){
+    list<Tipo> L;
+    this->getHojas(this->raiz, &L);
+    return L;
+
+}
+
 
 #endif

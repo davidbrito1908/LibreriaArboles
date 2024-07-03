@@ -8,141 +8,25 @@
 using namespace std;
 
 
-void Ramas(ArbolBin<string> A, int k){
+list<list<string>> Ramas(ArbolBin<string> A, int k){
     int l1,l2;
-    queue<NodoBin<string>*> c;
-    if(A.getRaiz() != nullptr){
-        c.push(A.getRaiz());
-        A.hojas(c);
-        while(!c.empty()){
-            list<string> L = A.camino(A.infoRaiz(), c.front()->getInfo());
-            if (L.size() == k){
-                while(!L.empty()){
-                    cout<<L.front()<<", ";
-                    L.pop_front();
-                }
-                cout<<endl;
+    list<string> hojas;
+    list<list<string>> result;
+    if(!A.esNulo()){
+        hojas = A.getHojas();
+        while(!hojas.empty()){
+
+            list<string> L = A.camino(A.infoRaiz(), hojas.front());
+
+            if (L.size() == k + 1){
+                result.push_back(L);
             }
-            c.pop();
+            hojas.pop_front();  
         }
     }
-    
+    return result; 
+
 }
-
-
-/*
-
-ArbolBin<string> leer(){
-    ArbolBin<string> A;
-    A.construir();
-    string tipo,datos, info,d, linea;
-    int k,i;
-    list<string> listaPre, listaPos, listaIn;
-    list<string> preorden, postorden, inorden;
-    bool pre=false;
-    //cin>>tipo;
-
-    preorden.clear();
-    postorden.clear();
-    inorden.clear();
-    listaPre.clear();
-    listaPos.clear();
-    listaIn.clear();
-
-    for(i=0;i<2;i++){
-        //cout<<"aaaaaaa";
-        cin>>tipo;
-        cout<<tipo<<endl;
-        if (tipo == "PREORDEN"){
-            pre=true;
-            getline(cin, datos);
-            stringstream data(datos);
-            data>>datos;
-            getline(data, datos, '[');
-            getline(data, datos, ']');
-            //cout<<info<<endl;
-            stringstream a(datos);
-            
-
-            while(getline(a, d, ',')){
-                preorden.push_back(d);
-                //cout<<preorden.back();
-            }
-            listaPre = preorden;
-
-        }else{
-            if (tipo == "POSTORDEN"){
-                pre=false;
-                getline(cin, datos);
-                stringstream data(datos);
-                data>>datos;
-                getline(data, datos, '[');
-                getline(data, datos, ']');
-                //cout<<datos<<endl;
-                stringstream a(datos);
-
-                //list<string> postorden;
-
-                while(getline(a, d, ',')){
-                    postorden.push_back(d);
-                    //cout<<postorden.back();
-                }
-                listaPos = postorden;
-
-            }
-            else{
-                if(tipo == "INORDEN"){
-                    //cout<<"inordennnnn";
-                    getline(cin, datos);
-                    stringstream data(datos);
-                    data>>datos;
-                    getline(data, datos, '[');
-                    getline(data, datos, ']');
-                    //cout<<datos<<endl;
-                    stringstream a(datos);
-
-                    list<string> inorden;
-                    while(getline(a, d, ',')){
-                        inorden.push_back(d);
-                        //cout<<inorden.back();
-                    }
-                    listaIn = inorden;
-
-                }
-            }
-        }
-    }
-    
-    if(pre){
-        /*while(!listaPre.empty()){
-            cout<<listaPre.front();
-            listaPre.pop_front();
-        }
-        while(!listaIn.empty()){
-            cout<<listaIn.front();
-            listaIn.pop_front();
-        }*/
- /*       if( listaPre.size() == listaIn.size()){
-            cout<<"xd";
-        }
-        NodoBin<string> *r = A.leerArbol(listaPre, listaIn);
-        //A.setRaiz(r);
-        //A.imprimirPreOrden();
-    }else{
-        //NodoBin<string> *r = A.leerArbolPostOrden(postorden, inorden);
-    }
-    preorden.clear();
-    postorden.clear();
-    inorden.clear();
-    listaPre.clear();
-    listaPos.clear();
-    listaIn.clear(); 
-
-    //A.imprimirPorNiveles();
-    return(A);
-
-}*/
-
 
 
 ArbolBin<string> leer(){
@@ -193,18 +77,22 @@ ArbolBin<string> leer(){
         }
 
     }
-    
     if(pre){
         A.setRaiz(A.leerArbol(preorden, inorden));
     }else{
         A.setRaiz(A.leerArbolPostOrden(postorden, inorden));
     }
+    while(!inorden.empty()){
+        cout << inorden.front() << ",";
+        inorden.pop_front();
+    }
+    cout<<endl;
+    A.imprimirInOrden();
     preorden.clear();
     postorden.clear();
     inorden.clear();
 
-    return(A);
-
+    return(A);   
 }
 
 
@@ -231,8 +119,18 @@ int main(){
         ArbolBin<string> A;
         //A.construir();
         A=leer();
-        A.imprimirPorNiveles();
-        //Ramas(A, k);
+        //A.imprimirInOrden(); 
+        list<list<string>> ramasKLongitud= Ramas(A, k);
+        while(!ramasKLongitud.empty()){
+
+            list<string> actual = ramasKLongitud.front();
+            while(!actual.empty()){
+                cout<< actual.front() << ", ";
+                actual.pop_front();
+            }
+            cout<<endl;
+            ramasKLongitud.pop_front();
+        }
     }
 
     return 0;
