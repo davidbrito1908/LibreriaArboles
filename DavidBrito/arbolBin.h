@@ -426,7 +426,7 @@ NodoBin<Tipo> * ArbolBin<Tipo>::leerArbol(list<Tipo> preorden, list<Tipo> inorde
 
 
         //LLENAR LISTAS DE LA PARTE IZQUIERDA DEL ARBOL (MIENTRAS NO SE ENCUENTRE LA RAIZ EN EL INORDEN)
-        while((!inorden.empty() && !preorden.empty()) && inorden.front() != r->getInfo()){
+        while((!inorden.empty() && !preorden.empty()) && (inorden.front() != r->getInfo())){
             inIzq.push_back(inorden.front());
             preIzq.push_back(preorden.front());
 
@@ -690,9 +690,10 @@ list<Tipo> ArbolBin<Tipo>::camino(Tipo e1, Tipo e2){
 
         if (ancestro != nullptr){
             caminoNodos(ancestro,e1,&band,&path1);
-            caminoNodos(ancestro->getHijoDer(),e2,&band,&path2);
+            caminoNodos(ancestro,e2,&band,&path2);
             path1.reverse();
             //path2.reverse();
+            path2.pop_front();
             path1.splice(path1.end(),path2);
 
         }
@@ -702,20 +703,22 @@ list<Tipo> ArbolBin<Tipo>::camino(Tipo e1, Tipo e2){
 template<typename Tipo>
 void ArbolBin<Tipo>::caminoNodos(NodoBin<Tipo>* ptr, Tipo e, bool *band, list<Tipo> *camino){
     bool bandI= false, bandD=false;
-    if (ptr->getInfo()==e){
-        *band= true;
-        camino->push_front(ptr->getInfo());
-    }
-    else if (ptr->getHijoIzq() == nullptr && ptr->getHijoDer() == nullptr)
-        *band= false;
-    else{
-        if (ptr->getHijoIzq()!=nullptr)
-            this->caminoNodos(ptr->getHijoIzq(), e, &bandI, camino);
-        if (ptr->getHijoDer()!=nullptr)
-            this->caminoNodos(ptr->getHijoDer(), e, &bandD, camino);
-        if((bandD)||(bandI)){
-            *band=true;
+    if(ptr!=nullptr){
+        if (ptr->getInfo()==e){
+            *band= true;
             camino->push_front(ptr->getInfo());
+        }
+        else if (ptr->getHijoIzq() == nullptr && ptr->getHijoDer() == nullptr)
+            *band= false;
+        else{
+            if (ptr->getHijoIzq()!=nullptr)
+                this->caminoNodos(ptr->getHijoIzq(), e, &bandI, camino);
+            if (ptr->getHijoDer()!=nullptr)
+                this->caminoNodos(ptr->getHijoDer(), e, &bandD, camino);
+            if((bandD)||(bandI)){
+                *band=true;
+                camino->push_front(ptr->getInfo());
+            }
         }
     }
 }/*

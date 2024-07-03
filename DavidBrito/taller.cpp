@@ -21,8 +21,8 @@ list<list<string>> Ramas(ArbolBin<string> A, int k){
             if (L.size() == k + 1){
                 result.push_back(L);
             }
-            hojas.pop_front();  
-        }
+            hojas.pop_front();     
+        }   
     }
     return result; 
 
@@ -46,7 +46,9 @@ ArbolBin<string> leer(){
             getline(data, info, ']');
             stringstream a(info);
 
+
             while(getline(a, d, ',')){
+                d.erase(remove_if(d.begin(), d.end(), ::isspace),d.end());
                 preorden.push_back(d);
             }
 
@@ -59,6 +61,7 @@ ArbolBin<string> leer(){
                 stringstream a(info);
 
                 while(getline(a, d, ',')){
+                    d.erase(remove_if(d.begin(), d.end(), ::isspace),d.end());
                     postorden.push_back(d);
                 }
 
@@ -71,6 +74,7 @@ ArbolBin<string> leer(){
                 stringstream a(info);
 
                 while(getline(a, d, ',')){
+                    d.erase(remove_if(d.begin(), d.end(), ::isspace),d.end());
                     inorden.push_back(d);
                 }
             }
@@ -82,12 +86,7 @@ ArbolBin<string> leer(){
     }else{
         A.setRaiz(A.leerArbolPostOrden(postorden, inorden));
     }
-    while(!inorden.empty()){
-        cout << inorden.front() << ",";
-        inorden.pop_front();
-    }
-    cout<<endl;
-    A.imprimirInOrden();
+
     preorden.clear();
     postorden.clear();
     inorden.clear();
@@ -107,8 +106,7 @@ int main(){
     string linea;
     int c, k;
     string nombre, datos, num;
-    
-    //queue<string> preorden1, postorden1, inorden1;
+
     list<string> preorden, postorden, inorden;
     bool pre, post;
     string line;
@@ -116,21 +114,29 @@ int main(){
     int i;
     for(i=0 ; i<c;i++){
         cin>>k;
-        ArbolBin<string> A;
-        //A.construir();
-        A=leer();
-        //A.imprimirInOrden(); 
+        ArbolBin<string> A;    
+        A=leer();   
+        //A.imprimirPorNiveles(); 
         list<list<string>> ramasKLongitud= Ramas(A, k);
+        if(ramasKLongitud.empty()){
+            cout<<"None";
+        }
         while(!ramasKLongitud.empty()){
 
             list<string> actual = ramasKLongitud.front();
+            cout<<"[";
             while(!actual.empty()){
-                cout<< actual.front() << ", ";
+                if(actual.size()==1){
+                    cout<< actual.front();
+                }else{
+                    cout<< actual.front() << ", ";
+                }
                 actual.pop_front();
             }
-            cout<<endl;
+            cout<<"]"<<endl;
             ramasKLongitud.pop_front();
         }
+        cout<<endl;
     }
 
     return 0;
