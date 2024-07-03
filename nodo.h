@@ -9,7 +9,7 @@ class Nodo{
         Tipo info;
         Nodo<Tipo> *hijoIzq, *herDer;
     public:
-        void crear(Tipo elemento, Nodo<Tipo> * hijoIzq, Nodo<Tipo>*HerDer);
+        void crear(Tipo elemento, Nodo<Tipo> * hijoIzq = nullptr, Nodo<Tipo>*HerDer = nullptr);
         Tipo getInfo();
         Nodo<Tipo> * getHijoIzq();
         Nodo<Tipo> * getHerDer();

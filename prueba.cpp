@@ -6,7 +6,17 @@
 #include "abb.h"
 using namespace std;
 int main(){
-    ArbolBin<int> A,B, C,D;
+    ArbolN<int> A;
+    A.construir();
+    A.setInfoRaiz(1);
+    A.insertarNodo(1,2,A.getRaiz());
+
+
+    return 0;
+}
+
+void pruebas(){
+        ArbolBin<int> A,B, C,D;
     NodoBin<int> r, hi,hd;
     
 
@@ -126,6 +136,4 @@ int main(){
     //cout << N->getInfo();
     //A.imprimirPreOrden();
 
-
-    return 0;
 }

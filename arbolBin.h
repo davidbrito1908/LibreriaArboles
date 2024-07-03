@@ -35,6 +35,7 @@ class ArbolBin{
         //SETTERS ==============================================
         void setPeso(int peso);
         void setRaiz(NodoBin<Tipo> * apuntador);//
+        void setInfoRaiz(Tipo valor);
 
         //INSERTAR Y ELIMINAR ==============================================
         void insertarNodo(Tipo padre, Tipo hijo, NodoBin<Tipo> *raiz);//
@@ -176,6 +177,15 @@ void ArbolBin<Tipo>::setPeso(int peso){
 template <typename Tipo>
 void ArbolBin<Tipo>::setRaiz(NodoBin<Tipo> * apuntador){
     this->raiz = apuntador;
+}
+template <typename Tipo>
+void ArbolBin<Tipo>::setInfoRaiz(Tipo valor){
+    if (this->raiz == nullptr){
+        this->raiz = new NodoBin<Tipo>;
+        this->raiz->crear(valor);
+    }else{
+        this->raiz->setInfo(valor);
+    }
 }
 
 

@@ -17,23 +17,30 @@ class ArbolN{
         void destruirNodos(Nodo<Tipo>* p);
 
     public:
+    //CONSTRUCTORES ==============================================
         void construir();
         void construir(Tipo raiz, list<ArbolN> L);
         void construir(ArbolN<Tipo> *a);
-        void copiar(ArbolN<Tipo> *A);
-        bool esNulo();
-
-        Tipo infoRaiz();
-        void insertarNodo(Tipo padre, Tipo hijo, Nodo<Tipo> *raiz);
         void crear(int peso, Nodo<Tipo> * raiz);
+
+        void copiar(ArbolN<Tipo> *A);
+        void destruir();
+
+    //GETTERS ==============================================
         int getPeso();
         Nodo<Tipo> * getRaiz();
+        list<ArbolN> hijos();
+        Tipo infoRaiz();
+    //SETTERS ==============================================
+        void setInfoRaiz(Tipo valor);
         void setPeso(int peso);
         void setRaiz(Nodo<Tipo> * r);
-        list<ArbolN> hijos();
+    //INSERTAR ==============================================
+        void insertarNodo(Tipo padre, Tipo hijo, Nodo<Tipo> *raiz);
         void insertarSubarbol(ArbolN<Tipo> arbol);
         void eliminarSubarbol (int pos);
-        void destruir();
+        
+    //RECORRIDOS ==============================================
 
 
         void imprimirPreOrden(Nodo<Tipo> *raiz);
@@ -41,7 +48,9 @@ class ArbolN{
         void imprimirInOrden(Nodo<Tipo> *raiz);
         void imprimirPorNiveles(queue<Nodo<Tipo>*> actual);
 
+    //VARIOS ==============================================
 
+        bool esNulo();
 };
 
 template <typename Tipo>
@@ -52,6 +61,17 @@ template <typename Tipo>
 void ArbolN<Tipo>::setRaiz(Nodo<Tipo> *r){
     this->raiz = r;
 }
+template <typename Tipo>
+void ArbolN<Tipo>::setInfoRaiz(Tipo valor){
+    if (this->raiz == nullptr){
+        this->raiz = new Nodo<Tipo>;
+        this->raiz->crear(valor);
+    }else{
+        this->raiz->setInfo(valor);
+    }
+}
+
+
 template <typename Tipo>
 void ArbolN<Tipo>::construir(){
     this->raiz =nullptr;
