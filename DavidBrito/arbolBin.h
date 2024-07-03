@@ -424,7 +424,7 @@ NodoBin<Tipo> * ArbolBin<Tipo>::leerArbol(list<Tipo> preorden, list<Tipo> inorde
 
 
         //LLENAR LISTAS DE LA PARTE IZQUIERDA DEL ARBOL (MIENTRAS NO SE ENCUENTRE LA RAIZ EN EL INORDEN)
-        while(inorden.front() != r->getInfo()){
+        while((!inorden.empty() && !preorden.empty()) && inorden.front() != r->getInfo()){
             inIzq.push_back(inorden.front());
             preIzq.push_back(preorden.front());
 
@@ -434,7 +434,7 @@ NodoBin<Tipo> * ArbolBin<Tipo>::leerArbol(list<Tipo> preorden, list<Tipo> inorde
         inorden.pop_front(); //eliminar raiz en inorden
 
         //LLENAR LISTAS DE LA PARTE DERECHA DEL ARBOL (MIENTRAS LAS LISTAS NO ESTÉN VACÍAS)
-        while(!inorden.empty()){
+        while((!inorden.empty() && !preorden.empty())){
             preDer.push_back(preorden.front());
             inDer.push_back(inorden.front());
 
@@ -466,7 +466,7 @@ NodoBin<Tipo> * ArbolBin<Tipo>::leerArbolPostOrden(list<Tipo> postorden, list<Ti
 
 
         //LLENAR LISTAS DE LA PARTE DERECHA DEL ARBOL (MIENTRAS NO SE ENCUENTRE LA RAIZ EN EL INORDEN)
-        while(inorden.front() != r->getInfo()){
+        while((!inorden.empty() && !postorden.empty()) && inorden.front() != r->getInfo()){
             inIzq.push_back(inorden.front());
             postIzq.push_back(postorden.front());
 
@@ -476,7 +476,7 @@ NodoBin<Tipo> * ArbolBin<Tipo>::leerArbolPostOrden(list<Tipo> postorden, list<Ti
         inorden.pop_front(); //eliminar raiz en inorden
 
         //LLENAR LISTAS DE LA PARTE IZQUIERDA DEL ARBOL (MIENTRAS LAS LISTAS NO ESTÉN VACÍAS)
-        while(!inorden.empty()){
+        while(!inorden.empty() && !postorden.empty()){
             postDer.push_back(postorden.front());
             inDer.push_back(inorden.front());
 
