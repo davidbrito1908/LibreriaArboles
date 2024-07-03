@@ -48,11 +48,19 @@ int main(){
     C.insertarNodo(14,15);
     //A.imprimirPorNiveles();
     A.insertarSubarbol(C);
-    cout << A.getPeso();
+    //cout << A.getPeso();
     B.copiar(&A);
     B.eliminarSubarbol(2);
-    B.imprimirPorNiveles();
-    cout << B.getPeso();
+    //B.imprimirPorNiveles();
+    //cout << B.getPeso();
+
+
+    list<ArbolN<int>> L = A.hijos();
+    while(!L.empty()){
+        L.front().imprimirPreOrden();
+        cout<<endl;
+        L.pop_front();
+    }
     /*list<int> L = A.camino(6,7);
     while(!L.empty()){
         cout<<L.front() << " ";
