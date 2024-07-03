@@ -29,7 +29,7 @@ int main(){
     C.imprimirPorNiveles();*/
 
 
-    ArbolBin<int> A,B;
+    ArbolN<int> A,B,C;
     A.setInfoRaiz(1);
     A.insertarNodo(1,2);
     A.insertarNodo(2,3);
@@ -40,11 +40,18 @@ int main(){
     A.insertarNodo(6,8);
     A.insertarNodo(6,9);
     A.insertarNodo(7,10);
+    A.insertarNodo(1,11);
+    A.insertarNodo(11,12);
+
+    C.setInfoRaiz(13);
+    C.insertarNodo(13,14);
+    C.insertarNodo(14,15);
     //A.imprimirPorNiveles();
+    A.insertarSubarbol(C);
     cout << A.getPeso();
     B.copiar(&A);
-    B.eliminarSubarbol(1);
-    A.imprimirPorNiveles();
+    B.eliminarSubarbol(2);
+    B.imprimirPorNiveles();
     cout << B.getPeso();
     /*list<int> L = A.camino(6,7);
     while(!L.empty()){

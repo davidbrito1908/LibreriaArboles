@@ -28,6 +28,7 @@ class ArbolN{
 
     //GETTERS ==============================================
         int getPeso();
+        int getPeso(Nodo<Tipo> *raiz);
         Nodo<Tipo> * getRaiz();
         list<ArbolN> hijos();
         Tipo infoRaiz();
@@ -65,6 +66,21 @@ class ArbolN{
 };
 
 template <typename Tipo>
+int ArbolN<Tipo>::getPeso(){
+    return this->peso;
+}
+template <typename Tipo>
+int ArbolN<Tipo>::getPeso(Nodo<Tipo> *raiz){
+    list<int> L;
+    preOrden(raiz, &L);
+    return  L.size();
+}
+
+template <typename Tipo>
+void ArbolN<Tipo>::setPeso(int peso){
+    this->peso = peso;
+}
+template <typename Tipo>
 Nodo<Tipo>* ArbolN<Tipo>::getRaiz(){
     return this->raiz;
 }
@@ -77,6 +93,7 @@ void ArbolN<Tipo>::setInfoRaiz(Tipo valor){
     if (this->raiz == nullptr){
         this->raiz = new Nodo<Tipo>;
         this->raiz->crear(valor);
+        this->peso = 1;
     }else{
         this->raiz->setInfo(valor);
     }
@@ -96,6 +113,7 @@ Nodo<Tipo>* ArbolN<Tipo>::copiarNodos(Nodo<Tipo>* p){
         return nullptr;
     }
     else{
+        this->peso = this->peso + 1;
         nuevo = new(Nodo<Tipo>);
         nuevo->crear(p->getInfo(), copiarNodos(p->getHijoIzq()), copiarNodos(p->getHerDer()));
         return (nuevo);
@@ -104,6 +122,7 @@ Nodo<Tipo>* ArbolN<Tipo>::copiarNodos(Nodo<Tipo>* p){
 template <typename Tipo>
 void ArbolN<Tipo>::construir(ArbolN<Tipo> *a){
     this->raiz = copiarNodos(a->getRaiz());
+    this->peso = a->getPeso();
 }
 template <typename Tipo>
 void ArbolN<Tipo>::construir(Tipo raiz, list<ArbolN<Tipo>> L){
@@ -126,6 +145,7 @@ void ArbolN<Tipo>::construir(Tipo raiz, list<ArbolN<Tipo>> L){
 template <typename Tipo>
 void ArbolN<Tipo>::copiar(ArbolN<Tipo> *a){
     this->setRaiz(copiarNodos(a->getRaiz()));
+    this->setPeso(a->getPeso());
 }
 
 
@@ -180,6 +200,7 @@ void ArbolN<Tipo>::destruirNodos(Nodo<Tipo> *p) {
         if(this->getRaiz()->getHijoIzq() != nullptr){
             destruirNodos(p->getHijoIzq());
         }
+        this->peso = this->peso -1;
         delete(p);
         p=nullptr;
     }
@@ -192,6 +213,8 @@ void ArbolN<Tipo>::eliminarSubarbol(int pos) {
     if (pos==1){
         elim = this->getRaiz()->getHijoIzq();
         this->getRaiz()->setHijoIzq(this->getRaiz()->getHijoIzq()->getHerDer());
+        elim->setHerDer(nullptr);
+        this->peso = this->peso - getPeso(elim);
     }
     else{
         aux = this->getRaiz()->getHijoIzq();
@@ -200,6 +223,8 @@ void ArbolN<Tipo>::eliminarSubarbol(int pos) {
         }
         elim = aux->getHerDer();
         aux->setHerDer(aux->getHerDer()->getHerDer());
+        elim->setHerDer(nullptr);
+        this->peso = this->peso - getPeso(elim);
     }
 
 }
@@ -250,6 +275,7 @@ void ArbolN<Tipo>::insertarNodo(Tipo padre, Tipo hijo, Nodo<Tipo> *raiz){
         if(raiz->getInfo() == padre){
             if (raiz->getHijoIzq() == nullptr){
                 raiz->setHijoIzq(nuevo);
+                this->peso = this->peso + 1;
                 return;
             }
             else{
@@ -258,6 +284,7 @@ void ArbolN<Tipo>::insertarNodo(Tipo padre, Tipo hijo, Nodo<Tipo> *raiz){
                     aux = aux->getHerDer();
                 }
                 aux->setHerDer(nuevo);
+                this->peso = this->peso + 1;
                 return;
             }
         }
