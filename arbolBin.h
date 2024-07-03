@@ -39,6 +39,7 @@ class ArbolBin{
 
         //INSERTAR Y ELIMINAR ==============================================
         void insertarNodo(Tipo padre, Tipo hijo, NodoBin<Tipo> *raiz);//
+        void insertarNodo(Tipo padre, Tipo hijo);//
         void insertarSubarbol(ArbolBin<Tipo> subarbol);//
         void eliminarSubarbol(int pos); //NO LOS ELIMINA COMO TAL
         //void destruirNodos(NodoBin<Tipo> *p); //HACER
@@ -70,9 +71,12 @@ class ArbolBin{
         bool esNulo();//
         list<Tipo> getPrimos(Tipo elemento, queue<NodoBin<Tipo>*> actual);
         void LCA(NodoBin<Tipo> *r, Tipo e1, Tipo e2, bool *encontrado1, bool *encontrado2, bool *LCAEncontrado, Tipo *ancestro);//
+        void LCANodo(NodoBin<Tipo> *r, Tipo e1, Tipo e2, bool *encontrado1, bool *encontrado2, bool *LCAEncontrado, NodoBin<Tipo> **ancestro);
         Tipo LCA(Tipo e1, Tipo e2);//
         void getPadre(Tipo e, NodoBin<Tipo> *raiz, bool *band, NodoBin<Tipo> **padre);
         NodoBin<Tipo>* getPadre(Tipo e);
+        list<Tipo> camino(Tipo e1,Tipo e2);
+        void caminoNodos(NodoBin<Tipo>* ptr, Tipo e, bool *band, list<Tipo> *camino);
 };
 
 
@@ -194,6 +198,10 @@ void ArbolBin<Tipo>::setInfoRaiz(Tipo valor){
 
 // INSERTAR ===========================================================================
 
+template <typename Tipo>
+void ArbolBin<Tipo>::insertarNodo(Tipo padre, Tipo hijo){
+    this->insertarNodo(padre,hijo, this->raiz);
+}
 template <typename Tipo>
 void ArbolBin<Tipo>::insertarNodo(Tipo padre, Tipo hijo, NodoBin<Tipo> *raiz){
     NodoBin<Tipo> *nuevo, *aux;
@@ -506,6 +514,39 @@ void ArbolBin<Tipo>::LCA(NodoBin<Tipo> *r, Tipo e1, Tipo e2, bool *encontrado1, 
         }
     }
 }
+template <typename Tipo>
+void ArbolBin<Tipo>::LCANodo(NodoBin<Tipo> *r, Tipo e1, Tipo e2, bool *encontrado1, bool *encontrado2, bool *LCAEncontrado, NodoBin<Tipo> **ancestro){
+    bool encontradoe1hi, encontradoe2hi, encontradoe1hd, encontradoe2hd;
+    
+    
+    if (!*LCAEncontrado){
+        if (r!=nullptr){
+            if ((r->getHijoIzq() == nullptr) && (r->getHijoDer() == nullptr)){
+                *encontrado1 = r->getInfo() == e1;
+                *encontrado2 = r->getInfo() == e2;
+            }else{
+                encontradoe1hi=false;
+                encontradoe1hd=false;
+                encontradoe2hd=false;
+                encontradoe2hi=false;
+
+                this->LCANodo(r->getHijoIzq(), e1, e2, &encontradoe1hi, &encontradoe2hi, LCAEncontrado, ancestro);
+                this->LCANodo(r->getHijoDer(), e1, e2, &encontradoe1hd, &encontradoe2hd, LCAEncontrado, ancestro);
+
+                if(!*LCAEncontrado){
+                    *encontrado1 = encontradoe1hi || encontradoe1hd || r->getInfo() == e1;
+                    *encontrado2 = encontradoe2hi || encontradoe2hd || r->getInfo() == e2;
+
+                    *LCAEncontrado = *encontrado1 && *encontrado2;
+
+                    if (*LCAEncontrado) {
+                        *ancestro = r;
+                    }
+                }
+            }
+        }
+    }
+}
 
 template <typename Tipo>
 Tipo ArbolBin<Tipo>::LCA(Tipo e1, Tipo e2){
@@ -613,5 +654,43 @@ NodoBin<Tipo>* ArbolBin<Tipo>::getPadre(Tipo e){
         return this->raiz;
     }
 }
+template <typename Tipo>
+list<Tipo> ArbolBin<Tipo>::camino(Tipo e1, Tipo e2){
+        list<Tipo> path1,path2;
+        NodoBin<Tipo>* ancestro= nullptr;
+        bool found1= false,found2= false,lcafound= false,band=false;
 
+        this->LCANodo(this->raiz,e1,e2, &found1, &found2, &lcafound, &ancestro);
+
+        if (ancestro != nullptr){
+            caminoNodos(ancestro,e1,&band,&path1);
+            caminoNodos(ancestro->getHijoDer(),e2,&band,&path2);
+            path1.reverse();
+            //path2.reverse();
+            path1.splice(path1.end(),path2);
+
+        }
+        return path1;
+
+}
+template<typename Tipo>
+void ArbolBin<Tipo>::caminoNodos(NodoBin<Tipo>* ptr, Tipo e, bool *band, list<Tipo> *camino){
+    bool bandI= false, bandD=false;
+    if (ptr->getInfo()==e){
+        *band= true;
+        camino->push_front(ptr->getInfo());
+    }
+    else if (ptr->getHijoIzq() == nullptr && ptr->getHijoDer() == nullptr)
+        *band= false;
+    else{
+        if (ptr->getHijoIzq()!=nullptr)
+            this->caminoNodos(ptr->getHijoIzq(), e, &bandI, camino);
+        if (ptr->getHijoDer()!=nullptr)
+            this->caminoNodos(ptr->getHijoDer(), e, &bandD, camino);
+        if((bandD)||(bandI)){
+            *band=true;
+            camino->push_front(ptr->getInfo());
+        }
+    }
+}
 #endif

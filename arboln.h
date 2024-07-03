@@ -101,7 +101,10 @@ Nodo<Tipo>* ArbolN<Tipo>::copiarNodos(Nodo<Tipo>* p){
         return (nuevo);
     }
 }
-
+template <typename Tipo>
+void ArbolN<Tipo>::construir(ArbolN<Tipo> *a){
+    this->raiz = copiarNodos(a->getRaiz());
+}
 template <typename Tipo>
 void ArbolN<Tipo>::construir(Tipo raiz, list<ArbolN<Tipo>> L){
     Nodo<Tipo> *aux;

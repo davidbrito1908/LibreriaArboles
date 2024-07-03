@@ -6,7 +6,7 @@
 #include "abb.h"
 using namespace std;
 int main(){
-    ArbolN<int> A;
+    /*ArbolN<int> A, B,C;
     A.construir();
     A.setInfoRaiz(1);
     A.insertarNodo(1,2,A.getRaiz());
@@ -15,7 +15,37 @@ int main(){
     A.insertarNodo(2,8,A.getRaiz());
     A.insertarNodo(2,10,A.getRaiz());
     A.insertarNodo(3,9,A.getRaiz());
-    A.imprimirInOrden();
+    A.imprimirPorNiveles();
+
+    B.setInfoRaiz(16);
+    B.insertarNodo(16,17);
+    B.insertarNodo(16,-5);
+    B.insertarNodo(-5,11);
+
+    A.insertarSubarbol(B);
+    A.eliminarSubarbol(4);
+    A.imprimirPorNiveles();
+    C.construir(&B);
+    C.imprimirPorNiveles();*/
+
+
+    ArbolBin<int> A;
+    A.setInfoRaiz(1);
+    A.insertarNodo(1,2);
+    A.insertarNodo(2,3);
+    A.insertarNodo(2,4);
+    A.insertarNodo(1,5);
+    A.insertarNodo(5,6);
+    A.insertarNodo(5,7);
+    A.imprimirPorNiveles();
+    list<int> L = A.camino(6,7);
+    while(!L.empty()){
+        cout<<L.front() << " ";
+        L.pop_front();
+    }
+
+
+
     /*while(!L.empty()){
         cout<<L.front();
         L.pop_front();
