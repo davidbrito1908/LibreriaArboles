@@ -15,6 +15,7 @@ class ArbolBin{
         NodoBin<Tipo> *raiz;
     private:
         NodoBin<Tipo> * copiarNodos(NodoBin<Tipo> *p);
+        void destruirNodos(NodoBin<Tipo> **ptrNodo);
 
     public:
         //CONSTRUCTORES ==============================================
@@ -27,6 +28,7 @@ class ArbolBin{
         
         //GETTERS ==============================================
         int getPeso();
+        int getPeso(NodoBin<Tipo> *raiz);
         NodoBin<Tipo> * getRaiz(); //
         Tipo infoRaiz(); //
         ArbolBin<Tipo> hijoIzq();//
@@ -88,6 +90,7 @@ NodoBin<Tipo>* ArbolBin<Tipo>::copiarNodos(NodoBin<Tipo> *p){
     if (p==nullptr){
         return nullptr;
     }else{
+        this->peso = this->peso + 1;
         nuevo = new(NodoBin<Tipo>);
         nuevo->crear(p->getInfo(), p->getHijoIzq(), p->getHijoDer());
         return(nuevo);
@@ -103,6 +106,7 @@ NodoBin<Tipo>* ArbolBin<Tipo>::copiarNodos(NodoBin<Tipo> *p){
 template <typename Tipo>
 void ArbolBin<Tipo>::construir(){
     this->setRaiz(nullptr);
+    this->peso = 0;
 }
 
 template <typename Tipo>
@@ -114,7 +118,7 @@ void ArbolBin<Tipo>::crear(int peso, NodoBin<Tipo> * raiz){
 template <typename Tipo>
 void ArbolBin<Tipo>::construir(Tipo e, ArbolBin<Tipo> a1, ArbolBin<Tipo> a2){
     ArbolBin<Tipo> arbolAux;
-
+    this->peso = 1;
     this->raiz = new(NodoBin<Tipo>);
     this->getRaiz()->setInfo(e);
     this->getRaiz()->setHijoIzq(copiarNodos(a1.getRaiz()));
@@ -123,14 +127,20 @@ void ArbolBin<Tipo>::construir(Tipo e, ArbolBin<Tipo> a1, ArbolBin<Tipo> a2){
 template <typename Tipo>
 void ArbolBin<Tipo>::construir(ArbolBin<Tipo> *a){
     this->raiz = copiarNodos(a->getRaiz());
+    this->peso = a->getPeso();
 }
 
 template <typename Tipo>
 void ArbolBin<Tipo>::copiar(ArbolBin<Tipo> *a){
     this->raiz = copiarNodos(a->getRaiz());
+    this->peso = a->getPeso();
 }
 
 
+template<class Tipo>
+void ArbolBin<Tipo>::destruirNodos(NodoBin<Tipo> **ptrNodo){
+    delete *ptrNodo;
+}
 
 
 
@@ -167,8 +177,16 @@ template <typename Tipo>
 Tipo ArbolBin<Tipo>::infoRaiz(){
     return (this->getRaiz()->getInfo());
 }
-
-
+template <typename Tipo>
+int ArbolBin<Tipo>::getPeso(){
+    return this->peso;
+}
+template <typename Tipo>
+int ArbolBin<Tipo>::getPeso(NodoBin<Tipo> *raiz){
+    list<int> L;
+    preOrden(raiz, &L);
+    return  L.size();
+}
 
 
 //SETTERS =============================================================================
@@ -187,6 +205,7 @@ void ArbolBin<Tipo>::setInfoRaiz(Tipo valor){
     if (this->raiz == nullptr){
         this->raiz = new NodoBin<Tipo>;
         this->raiz->crear(valor);
+        this->peso = 1;
     }else{
         this->raiz->setInfo(valor);
     }
@@ -215,10 +234,12 @@ void ArbolBin<Tipo>::insertarNodo(Tipo padre, Tipo hijo, NodoBin<Tipo> *raiz){
         if(raiz->getInfo() == padre){
                 if (raiz->getHijoIzq() == nullptr){
                     raiz->setHijoIzq(nuevo);
+                    this->peso = this->peso + 1;
                     return;
                 }
                 if (raiz->getHijoDer() == nullptr){
                     raiz->setHijoDer(nuevo);
+                    this->peso = this->peso + 1;
                     return;
                 }
         }else{
@@ -248,11 +269,14 @@ void ArbolBin<Tipo>::eliminarSubarbol(int pos) {
         aux = this->getRaiz()->getHijoIzq();
         this->getRaiz()->setHijoIzq(this->getRaiz()->getHijoDer());
         this->getRaiz()->setHijoDer(nullptr);
+        this->peso = this->peso - getPeso(aux);
     }
     else{
         aux = this->getRaiz()->getHijoDer();
         this->getRaiz()->setHijoDer(nullptr);
+        this->peso = this->peso - getPeso(aux);
     }
+    //this->destruirNodos(&aux);
 
 }
 
