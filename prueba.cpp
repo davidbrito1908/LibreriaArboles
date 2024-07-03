@@ -3,6 +3,7 @@
 #include <queue>
 #include <list>
 #include "arboln.h"
+#include "abb.h"
 using namespace std;
 int main(){
     ArbolBin<int> A,B, C,D;
@@ -93,10 +94,38 @@ int main(){
     c.push(A.getRaiz());
     //A.imprimirPreOrden();
 
-    list<int> L = A.inOrden();
-    while(!L.empty()){
-        cout<<L.front()<<" ";
-        L.pop_front();
+    ABB<int> O;
+    O.construir();
+    O.insertar(15);
+    O.insertar(5);
+    O.insertar(3);
+    O.insertar(12);
+    O.insertar(16);
+    O.insertar(10);
+    O.insertar(13);
+    O.insertar(20);
+    O.insertar(23);
+    O.insertar(18);
+    O.insertar(6);
+    O.insertar(7);
+    O.eliminar(13);
+
+    int padre = O.getPadre(10)->getInfo();
+    cout<<endl<<padre<<endl;
+
+    O.imprimirPorNiveles();
+    /*list<int> P = O.inOrden();
+    while(!P.empty()){
+        cout<<P.front()<< " ";
+        P.pop_front();
+    }*/
+    if (O.buscar(12)){
+        cout<<"Si esta";
     }
+    //NodoBin<int> *N = O.encontrar(1);
+    //cout << N->getInfo();
+    //A.imprimirPreOrden();
+
+
     return 0;
 }

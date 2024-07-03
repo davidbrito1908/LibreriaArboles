@@ -70,6 +70,8 @@ class ArbolBin{
         list<Tipo> getPrimos(Tipo elemento, queue<NodoBin<Tipo>*> actual);
         void LCA(NodoBin<Tipo> *r, Tipo e1, Tipo e2, bool *encontrado1, bool *encontrado2, bool *LCAEncontrado, Tipo *ancestro);//
         Tipo LCA(Tipo e1, Tipo e2);//
+        void getPadre(Tipo e, NodoBin<Tipo> *raiz, bool *band, NodoBin<Tipo> **padre);
+        NodoBin<Tipo>* getPadre(Tipo e);
 };
 
 
@@ -557,4 +559,49 @@ list<Tipo> ArbolBin<Tipo>::getPrimos(Tipo elemento, queue<NodoBin<Tipo>*> actual
     }
     return primos;
 }
+
+template <typename Tipo>
+void ArbolBin<Tipo>::getPadre(Tipo e, NodoBin<Tipo> *raiz, bool *band, NodoBin<Tipo> **padre){
+    //NodoBin<Tipo> *aux;
+
+    if(raiz != nullptr && !*band){
+        if (raiz->getHijoIzq()!=nullptr){
+            if(raiz->getHijoIzq()->getInfo() == e){
+                *band = true;
+                *padre = raiz;
+                return;
+            }else{
+                this->getPadre(e, raiz->getHijoIzq(), band, padre);
+                if (*band){
+                    return;
+                }
+            }
+        }
+        if(raiz->getHijoDer() != nullptr){
+            if(raiz->getHijoDer()->getInfo() == e){
+                *band = true;
+                *padre=raiz;
+                return;
+            }else{
+                this->getPadre(e, raiz->getHijoDer(), band, padre);
+                if (*band){
+                    return;
+                }
+            }
+        }
+    }
+}
+template <typename Tipo>
+NodoBin<Tipo>* ArbolBin<Tipo>::getPadre(Tipo e){
+    NodoBin<Tipo> *padre;
+    bool band=false;
+    padre = nullptr;
+    this->getPadre(e,this->raiz,&band, &padre);
+    if (padre!=nullptr){
+        return padre;
+    }else{
+        return this->raiz;
+    }
+}
+
 #endif
